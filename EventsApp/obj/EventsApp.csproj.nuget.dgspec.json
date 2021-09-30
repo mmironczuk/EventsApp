@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EventsApp\\EventsApp.csproj": {}
+    "D:\\GitHub\\EventsApp\\EventsApp\\EventsApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\EmailService.csproj": {
+    "D:\\GitHub\\EventsApp\\EmailService\\EmailService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\EmailService.csproj",
+        "projectUniqueName": "D:\\GitHub\\EventsApp\\EmailService\\EmailService.csproj",
         "projectName": "EmailService",
-        "projectPath": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\EmailService.csproj",
+        "projectPath": "D:\\GitHub\\EventsApp\\EmailService\\EmailService.csproj",
         "packagesPath": "C:\\Users\\MichalMironczuk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\obj\\",
+        "outputPath": "D:\\GitHub\\EventsApp\\EmailService\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\MichalMironczuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -68,14 +68,14 @@
         }
       }
     },
-    "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EventsApp\\EventsApp.csproj": {
+    "D:\\GitHub\\EventsApp\\EventsApp\\EventsApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EventsApp\\EventsApp.csproj",
+        "projectUniqueName": "D:\\GitHub\\EventsApp\\EventsApp\\EventsApp.csproj",
         "projectName": "EventsApp",
-        "projectPath": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EventsApp\\EventsApp.csproj",
+        "projectPath": "D:\\GitHub\\EventsApp\\EventsApp\\EventsApp.csproj",
         "packagesPath": "C:\\Users\\MichalMironczuk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EventsApp\\obj\\",
+        "outputPath": "D:\\GitHub\\EventsApp\\EventsApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\MichalMironczuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -92,8 +92,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\EmailService.csproj": {
-                "projectPath": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\EmailService.csproj"
+              "D:\\GitHub\\EventsApp\\EmailService\\EmailService.csproj": {
+                "projectPath": "D:\\GitHub\\EventsApp\\EmailService\\EmailService.csproj"
               }
             }
           }
@@ -108,6 +108,10 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "MailKit": {
+              "target": "Package",
+              "version": "[2.15.0, )"
+            },
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
               "version": "[3.1.13, )"
@@ -133,6 +137,10 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[3.1.5, )"
+            },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[2.15.1, )"
             }
           },
           "imports": [

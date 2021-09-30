@@ -1,3 +1,4 @@
+using EmailService;
 using EventsApp.Data;
 using EventsApp.Models;
 using Microsoft.AspNetCore.Builder;
@@ -25,9 +26,16 @@ namespace EventsApp
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var emailConfig = Configuration.GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+                services.AddSingleton(emailConfig);
+
+            services.AddScoped<EmailService.IEmailSender, EmailSender>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("EventsApp")));

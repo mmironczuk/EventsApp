@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qEkT9xxNoCLUXvvR1QF+8Zoq12+WUHXRghn/LTZyAgJ9h0sVs5mBMv/xCT8FXApX9/msUojJKovuXE6DYGarvg==",
+  "dgSpecHash": "pRI8XFeAff7emTERjbESXPJAaJFfhudIz2jFOq/KcHnGe0flmUcgIjMb0oJR3SK2GlYhc4QVVDeLwVg14d2jbQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\EmailService.csproj",
+  "projectFilePath": "D:\\GitHub\\EventsApp\\EmailService\\EmailService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\mailkit\\2.12.0\\mailkit.2.12.0.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",

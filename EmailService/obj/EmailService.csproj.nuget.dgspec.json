@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\EmailService.csproj": {}
+    "D:\\GitHub\\EventsApp\\EmailService\\EmailService.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\EmailService.csproj": {
+    "D:\\GitHub\\EventsApp\\EmailService\\EmailService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\EmailService.csproj",
+        "projectUniqueName": "D:\\GitHub\\EventsApp\\EmailService\\EmailService.csproj",
         "projectName": "EmailService",
-        "projectPath": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\EmailService.csproj",
+        "projectPath": "D:\\GitHub\\EventsApp\\EmailService\\EmailService.csproj",
         "packagesPath": "C:\\Users\\MichalMironczuk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\obj\\",
+        "outputPath": "D:\\GitHub\\EventsApp\\EmailService\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\MichalMironczuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
