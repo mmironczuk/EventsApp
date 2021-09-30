@@ -1,0 +1,9 @@
+C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\bin\Debug\netcoreapp3.1\EmailService.deps.json
+C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\bin\Debug\netcoreapp3.1\EmailService.dll
+C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\bin\Debug\netcoreapp3.1\EmailService.pdb
+C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.csprojAssemblyReference.cache
+C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.AssemblyInfoInputs.cache
+C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.AssemblyInfo.cs
+C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.csproj.CoreCompileInputs.cache
+C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.dll
+C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.pdb

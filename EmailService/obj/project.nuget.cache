@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "qEkT9xxNoCLUXvvR1QF+8Zoq12+WUHXRghn/LTZyAgJ9h0sVs5mBMv/xCT8FXApX9/msUojJKovuXE6DYGarvg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\MichalMironczuk\\Desktop\\EventsApp\\EmailService\\EmailService.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\mailkit\\2.12.0\\mailkit.2.12.0.nupkg.sha512",
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\mimekit\\2.12.0\\mimekit.2.12.0.nupkg.sha512",
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\portable.bouncycastle\\1.8.10\\portable.bouncycastle.1.8.10.nupkg.sha512",
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.reflection.typeextensions\\4.4.0\\system.reflection.typeextensions.4.4.0.nupkg.sha512",
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.security.cryptography.cng\\4.7.0\\system.security.cryptography.cng.4.7.0.nupkg.sha512",
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.security.cryptography.pkcs\\4.7.0\\system.security.cryptography.pkcs.4.7.0.nupkg.sha512",
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.text.encoding.codepages\\4.4.0\\system.text.encoding.codepages.4.4.0.nupkg.sha512"
+  ],
+  "logs": []
+}

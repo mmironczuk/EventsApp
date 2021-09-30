@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsApp", "EventsApp\EventsApp.csproj", "{92180854-67C7-490C-A2E8-D9206F3896C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailService\EmailService.csproj", "{267B9A1D-8CC3-44EA-95E8-3DF3ABD783D6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92180854-67C7-490C-A2E8-D9206F3896C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92180854-67C7-490C-A2E8-D9206F3896C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92180854-67C7-490C-A2E8-D9206F3896C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92180854-67C7-490C-A2E8-D9206F3896C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{267B9A1D-8CC3-44EA-95E8-3DF3ABD783D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{267B9A1D-8CC3-44EA-95E8-3DF3ABD783D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{267B9A1D-8CC3-44EA-95E8-3DF3ABD783D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{267B9A1D-8CC3-44EA-95E8-3DF3ABD783D6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58C3641C-077F-41B9-970C-F4A5C134163D}
+	EndGlobalSection
+EndGlobal
