@@ -25,6 +25,9 @@
                 @Html.DisplayNameFor(model => model.freeTickets)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.type)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Organizer)
             </th>
             <th>
@@ -49,10 +52,13 @@
                 @Html.DisplayFor(modelItem => item.freeTickets)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.type)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Organizer.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Place.PlaceId)
+                @Html.DisplayFor(modelItem => item.Place.address)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.MainEventId">Edit</a> |

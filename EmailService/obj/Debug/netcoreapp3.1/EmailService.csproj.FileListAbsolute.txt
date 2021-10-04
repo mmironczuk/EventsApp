@@ -7,3 +7,12 @@ C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\obj\Debug\netcoreapp3.1\
 C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.csproj.CoreCompileInputs.cache
 C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.dll
 C:\Users\MichalMironczuk\Desktop\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.pdb
+D:\GitHub\EventsApp\EmailService\bin\Debug\netcoreapp3.1\EmailService.deps.json
+D:\GitHub\EventsApp\EmailService\bin\Debug\netcoreapp3.1\EmailService.dll
+D:\GitHub\EventsApp\EmailService\bin\Debug\netcoreapp3.1\EmailService.pdb
+D:\GitHub\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.csprojAssemblyReference.cache
+D:\GitHub\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.AssemblyInfoInputs.cache
+D:\GitHub\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.AssemblyInfo.cs
+D:\GitHub\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.csproj.CoreCompileInputs.cache
+D:\GitHub\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.dll
+D:\GitHub\EventsApp\EmailService\obj\Debug\netcoreapp3.1\EmailService.pdb

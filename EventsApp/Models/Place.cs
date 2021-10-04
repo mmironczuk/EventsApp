@@ -10,6 +10,9 @@ namespace EventsApp.Models
     {
         public int PlaceId { get; set; }
         [Required]
+        [Display(Name = "Nazwa")]
+        public string name { get; set; }
+        [Required]
         [Display(Name ="Województwo")]
         public string province { get; set; }
         [Required]

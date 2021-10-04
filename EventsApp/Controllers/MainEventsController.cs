@@ -50,7 +50,7 @@ namespace EventsApp.Controllers
         public IActionResult Create()
         {
             ViewData["OrganizerId"] = new SelectList(_context.User, "Id", "Id");
-            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "PlaceId");
+            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MainEventId,title,description,date,freeTickets,PlaceId,OrganizerId")] MainEvent mainEvent)
+        public async Task<IActionResult> Create([Bind("MainEventId,title,description,date,freeTickets,PlaceId,type,OrganizerId")] MainEvent mainEvent)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +68,7 @@ namespace EventsApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["OrganizerId"] = new SelectList(_context.User, "Id", "Id", mainEvent.OrganizerId);
-            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "PlaceId", mainEvent.PlaceId);
+            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address", mainEvent.PlaceId);
             return View(mainEvent);
         }
 
@@ -86,7 +86,7 @@ namespace EventsApp.Controllers
                 return NotFound();
             }
             ViewData["OrganizerId"] = new SelectList(_context.User, "Id", "Id", mainEvent.OrganizerId);
-            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "PlaceId", mainEvent.PlaceId);
+            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address", mainEvent.PlaceId);
             return View(mainEvent);
         }
 
@@ -95,7 +95,7 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MainEventId,title,description,date,freeTickets,PlaceId,OrganizerId")] MainEvent mainEvent)
+        public async Task<IActionResult> Edit(int id, [Bind("MainEventId,title,description,date,freeTickets,PlaceId,type,OrganizerId")] MainEvent mainEvent)
         {
             if (id != mainEvent.MainEventId)
             {
@@ -123,7 +123,7 @@ namespace EventsApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["OrganizerId"] = new SelectList(_context.User, "Id", "Id", mainEvent.OrganizerId);
-            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "PlaceId", mainEvent.PlaceId);
+            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address", mainEvent.PlaceId);
             return View(mainEvent);
         }
 

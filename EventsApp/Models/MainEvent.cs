@@ -15,18 +15,38 @@ namespace EventsApp.Models
         [Display(Name = "Opis")]
         public string description { get; set; }
         [Required]
-        [Display(Name = "Data")]
+        [Display(Name = "Data rozpoczęcia")]
         [DataType(DataType.DateTime)]
-        public DateTime date { get; set; }
+        public DateTime dateStart { get; set; }
+        [Required]
+        [Display(Name = "Data zakończenia")]
+        [DataType(DataType.DateTime)]
+        public DateTime dateEnd { get; set; }
         [Required]
         [Display(Name ="Ilość biletów")]
         public int freeTickets { get; set; }
         [Required]
         [Display(Name = "Miejsce odbywania się wydarzenia")]
         public int PlaceId { get; set; }
-        public string OrganizerId { get; set; }
-        public virtual User Organizer { get; set; }
+        [Required]
+        [Display(Name = "Nazwa")]
+        public string name { get; set; }
+        [Required]
+        [Display(Name = "Województwo")]
+        public string province { get; set; }
+        [Required]
+        [Display(Name = "Miasto")]
+        public string city { get; set; }
+        [Required]
+        [Display(Name = "Adres")]
+        public string address { get; set; }
+        [Display(Name ="Rodzaj wydarzenia")]
+        public string type { get; set; }
+        public string UserId { get; set; }
+        public int OrganizerId { get; set; }
+        public virtual User User { get; set; }
         public virtual Place Place { get; set; }
+        public virtual Organizer Organizer { get; set; }
         public virtual ICollection<Opinion> Opinions { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<Favourites> Favourites { get; set; }
