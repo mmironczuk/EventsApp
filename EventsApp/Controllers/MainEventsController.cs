@@ -22,7 +22,7 @@ namespace EventsApp.Controllers
         // GET: MainEvents
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Event.Include(m => m.Organizer).Include(m => m.Place);
+            var applicationDbContext = _context.Event.Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -37,6 +37,7 @@ namespace EventsApp.Controllers
             var mainEvent = await _context.Event
                 .Include(m => m.Organizer)
                 .Include(m => m.Place)
+                .Include(m => m.User)
                 .FirstOrDefaultAsync(m => m.MainEventId == id);
             if (mainEvent == null)
             {
@@ -49,8 +50,11 @@ namespace EventsApp.Controllers
         // GET: MainEvents/Create
         public IActionResult Create()
         {
-            ViewData["OrganizerId"] = new SelectList(_context.User, "Id", "Id");
+            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "OrganizerId");
             ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address");
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "name");
+            //var miejsca = _context.Place.ToList();
+            //ViewData["Miejsca"] = miejsca;
             return View();
         }
 
@@ -59,7 +63,7 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MainEventId,title,description,date,freeTickets,PlaceId,type,OrganizerId")] MainEvent mainEvent)
+        public async Task<IActionResult> Create([Bind("MainEventId,title,description,dateStart,dateEnd,freeTickets,PlaceId,name,province,city,address,type,UserId,OrganizerId")] MainEvent mainEvent)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +71,10 @@ namespace EventsApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizerId"] = new SelectList(_context.User, "Id", "Id", mainEvent.OrganizerId);
+            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "OrganizerId", mainEvent.OrganizerId);
             ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address", mainEvent.PlaceId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", mainEvent.UserId);
+            ViewBag.Miejsca = _context.Place.ToListAsync();
             return View(mainEvent);
         }
 
@@ -85,8 +91,9 @@ namespace EventsApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["OrganizerId"] = new SelectList(_context.User, "Id", "Id", mainEvent.OrganizerId);
+            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "OrganizerId", mainEvent.OrganizerId);
             ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address", mainEvent.PlaceId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", mainEvent.UserId);
             return View(mainEvent);
         }
 
@@ -95,7 +102,7 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MainEventId,title,description,date,freeTickets,PlaceId,type,OrganizerId")] MainEvent mainEvent)
+        public async Task<IActionResult> Edit(int id, [Bind("MainEventId,title,description,dateStart,dateEnd,freeTickets,PlaceId,name,province,city,address,type,UserId,OrganizerId")] MainEvent mainEvent)
         {
             if (id != mainEvent.MainEventId)
             {
@@ -122,8 +129,9 @@ namespace EventsApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizerId"] = new SelectList(_context.User, "Id", "Id", mainEvent.OrganizerId);
+            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "OrganizerId", mainEvent.OrganizerId);
             ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address", mainEvent.PlaceId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", mainEvent.UserId);
             return View(mainEvent);
         }
 
@@ -138,6 +146,7 @@ namespace EventsApp.Controllers
             var mainEvent = await _context.Event
                 .Include(m => m.Organizer)
                 .Include(m => m.Place)
+                .Include(m => m.User)
                 .FirstOrDefaultAsync(m => m.MainEventId == id);
             if (mainEvent == null)
             {

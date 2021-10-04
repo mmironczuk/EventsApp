@@ -446,11 +446,6 @@ D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Favourites\Edi
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Favourites\Index.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
-D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Create.cshtml.g.cs
-D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Delete.cshtml.g.cs
-D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Details.cshtml.g.cs
-D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Edit.cshtml.g.cs
-D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Index.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Opinions\Create.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Opinions\Delete.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Opinions\Details.cshtml.g.cs
@@ -461,11 +456,6 @@ D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Photos\Delete.
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Photos\Details.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Photos\Edit.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Photos\Index.cshtml.g.cs
-D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Create.cshtml.g.cs
-D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Delete.cshtml.g.cs
-D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Details.cshtml.g.cs
-D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Edit.cshtml.g.cs
-D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Index.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Role\Create.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Role\Index.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
@@ -486,3 +476,13 @@ D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\EventsApp.csproj.CopyCompl
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\EventsApp.dll
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\EventsApp.pdb
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\EventsApp.genruntimeconfig.cache
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Create.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Delete.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Details.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Edit.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Index.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Create.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Delete.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Details.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Edit.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Index.cshtml.g.cs

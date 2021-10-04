@@ -40,7 +40,7 @@ namespace EventsApp.Models
         [Required]
         [Display(Name = "Adres")]
         public string address { get; set; }
-        [Display(Name ="Rodzaj wydarzenia")]
+        [Display(Name ="Kategoria wydarzenia")]
         public string type { get; set; }
         public string UserId { get; set; }
         public int OrganizerId { get; set; }
@@ -50,5 +50,6 @@ namespace EventsApp.Models
         public virtual ICollection<Opinion> Opinions { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<Favourites> Favourites { get; set; }
+        public virtual ICollection<TagEvent> TagEvents { get; set; }
     }
 }
