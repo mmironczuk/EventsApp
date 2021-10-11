@@ -71,3 +71,11 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
+#bbb {
+    background-color: bisque;
+    border-style: solid;
+    border-top-width: 5px;
+    border-bottom-width: 5px;
+    border-color: black;
+    padding: 15px;
+}
