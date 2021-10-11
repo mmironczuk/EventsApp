@@ -53,8 +53,8 @@ namespace EventsApp.Controllers
             ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "OrganizerId");
             ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address");
             ViewData["UserId"] = new SelectList(_context.User, "Id", "name");
-            //var miejsca = _context.Place.ToList();
-            //ViewData["Miejsca"] = miejsca;
+            var miejsca = _context.Place.ToList();
+            ViewData["Miejsca"] = miejsca;
             return View();
         }
 
