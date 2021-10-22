@@ -9,7 +9,7 @@ namespace EventsApp.Models
     {
         public int OrganizerId { get; set; }
         public string name { get; set; }
-        public string phone { get; set; }
+        public bool confirmed { get; set; }
         public virtual ICollection<MainEvent> MainEvents { get; set; }
     }
 }

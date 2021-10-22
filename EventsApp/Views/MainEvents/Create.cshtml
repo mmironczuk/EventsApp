@@ -1,4 +1,4 @@
-﻿@model EventsApp.Models.MainEvent
+﻿@model EventsApp.ViewModels.MainEventViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="title" class="control-label"></label>
@@ -24,12 +24,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="dateStart" class="control-label"></label>
-                <input asp-for="dateStart" type="date" class="form-control" />
+                <input asp-for="dateStart" class="form-control" />
                 <span asp-validation-for="dateStart" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="dateEnd" class="control-label"></label>
-                <input asp-for="dateEnd" type="date" class="form-control" />
+                <input asp-for="dateEnd" class="form-control" />
                 <span asp-validation-for="dateEnd" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -37,29 +37,54 @@
                 <input asp-for="freeTickets" class="form-control" />
                 <span asp-validation-for="freeTickets" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="PlaceId" class="control-label"></label>
-                <input type="text" asp-for="PlaceId" class="form-control" list="places"/>
-                <datalist id="places" asp-items="ViewBag.PlaceId"/>
-            </div>*@
             <div class="form-group">
-                <label asp-for="PlaceId" class="control-label"></label>
-                <select asp-for="PlaceId" class="form-control" >
-                    @foreach(var p in ViewBag.Miejsca)
-                    {
-                        <option value="@p.PlaceId">@p.name</option>
-                    }
-                </select>
+                <label asp-for="minPrice" class="control-label"></label>
+                <input asp-for="minPrice" class="form-control" />
+                <span asp-validation-for="minPrice" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="maxPrice" class="control-label"></label>
+                <input asp-for="maxPrice" class="form-control" />
+                <span asp-validation-for="maxPrice" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+        <label asp-for="PlaceId" class="control-label"></label>
+        <select asp-for="PlaceId" class="form-control">
+            @foreach (var p in ViewBag.Miejsca)
+            {
+                <option value="@p.PlaceId">@p.name</option>
+            }
+        </select>
+        </div>*@
+            @*<div class="form-group">
+            <label asp-for="PlaceId" class="control-label"></label>
+            <input asp-for="PlaceId" class="form-control" type='text' list='listid' name="place">
+            <datalist id='listid'>
+                @foreach (var p in ViewBag.Miejsca)
+                {
+                    <option value="@p.name" data-value="@p.PlaceId"></option>
+                }
+            </datalist>
+        </div>*@
             <div class="form-group">
                 <label asp-for="name" class="control-label"></label>
-                <input asp-for="name" class="form-control" />
-                <span asp-validation-for="name" class="text-danger"></span>
+                <input asp-for="name" class="form-control" type='text' list='listid'>
+                <datalist id='listid'>
+                    @foreach (var p in ViewBag.Miejsca)
+                    {
+                        <option value="@p.name"></option>
+                    }
+                </datalist>
             </div>
+            @*<div class="form-group">
+        <label asp-for="name" class="control-label"></label>
+        <input asp-for="name" class="form-control" />
+        <span asp-validation-for="name" class="text-danger"></span>
+        </div>*@
             <div class="form-group">
-                <label asp-for="province" class="control-label"></label>
-                <input asp-for="province" class="form-control" />
-                <span asp-validation-for="province" class="text-danger"></span>
+                <label asp-for="address" class="control-label"></label>
+                <input asp-for="address" class="form-control" />
+                <span asp-validation-for="address" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="city" class="control-label"></label>
@@ -67,9 +92,25 @@
                 <span asp-validation-for="city" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="address" class="control-label"></label>
-                <input asp-for="address" class="form-control" />
-                <span asp-validation-for="address" class="text-danger"></span>
+                <label asp-for="province" class="control-label"></label>
+                <select asp-for="province" class="form-control">
+                    <option value="dolnośląskie">dolnośląskie</option>
+                    <option value="kujawsko-pomorskie">kujawsko-pomorskie</option>
+                    <option value="lubelskie">lubelskie</option>
+                    <option value="lubuskie">lubuskie</option>
+                    <option value="mazowieckie">mazowieckie</option>
+                    <option value="małopolskie">małopolskie</option>
+                    <option value="opolskie">opolskie</option>
+                    <option value="podkarpackie">podkarpackie</option>
+                    <option value="podlaskie">podlaskie</option>
+                    <option value="pomorskie">pomorskie</option>
+                    <option value="śląskie">śląskie</option>
+                    <option value="świętokrzyskie">świętokrzyskie</option>
+                    <option value="warmińsko-mazurskie">warmińsko-mazurskie</option>
+                    <option value="wielkopolskie">wielkopolskie</option>
+                    <option value="zachodniopomorskie">zachodniopomorskie</option>
+                    <option value="łódzkie">łódzkie</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="type" class="control-label"></label>
@@ -84,8 +125,22 @@
                 <span asp-validation-for="type" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="OrganizerId" class="control-label"></label>
-                <select asp-for="OrganizerId" class="form-control" asp-items="ViewBag.OrganizerId"></select>
+                <label asp-for="picture" class="control-label"></label>
+                <input asp-for="picture" class="form-control" />
+                <span asp-validation-for="picture" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrganizerName" class="control-label"></label>
+                <input asp-for="OrganizerName" class="form-control" type='text' list='OrganizerList'>
+                <datalist id='OrganizerList'>
+                    @if (ViewBag.Organizers.Count > 0)
+                    {
+                        @foreach (var p in ViewBag.Organizers)
+                        {
+                            <option value="@p.name"></option>
+                        }
+                    }
+                </datalist>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -101,3 +156,4 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+

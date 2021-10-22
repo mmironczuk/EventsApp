@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EventsApp.Data;
 using EventsApp.Models;
+using Microsoft.AspNetCore.Authorization;
+using EventsApp.ViewModels;
+using System.IO;
 
 namespace EventsApp.Controllers
 {
@@ -48,12 +51,13 @@ namespace EventsApp.Controllers
         }
 
         // GET: MainEvents/Create
+        [Authorize]
         public IActionResult Create()
         {
-            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "OrganizerId");
-            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address");
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "name");
-            var miejsca = _context.Place.ToList();
+            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "name");
+            var organizers = _context.Organizer.Where(x => x.confirmed == true).ToList();
+            ViewData["Organizers"] = organizers;
+            var miejsca = _context.Place.Where(x=>x.confirmed==true).ToList();
             ViewData["Miejsca"] = miejsca;
             return View();
         }
@@ -63,19 +67,78 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MainEventId,title,description,dateStart,dateEnd,freeTickets,PlaceId,name,province,city,address,type,UserId,OrganizerId")] MainEvent mainEvent)
+        public async Task<IActionResult> Create([Bind("MainEventId,title,description,dateStart,dateEnd,freeTickets,minPrice,maxPrice,name,province,city,address,type,picture,OrganizerName")] MainEventViewModel mainEventView)
         {
             if (ModelState.IsValid)
             {
+                MainEvent mainEvent = new MainEvent
+                {
+                    title = mainEventView.title,
+                    description = mainEventView.description,
+                    dateStart = mainEventView.dateStart,
+                    dateEnd = mainEventView.dateEnd,
+                    freeTickets = mainEventView.freeTickets,
+                    minPrice = mainEventView.minPrice,
+                    maxPrice=mainEventView.maxPrice,
+                    type = mainEventView.type,
+                };
+                //UserId
+                User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+                mainEvent.UserId = user.Id;
+
+                //Picture
+                using (var ms = new MemoryStream())
+                {
+                    mainEventView.picture.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    string s = Convert.ToBase64String(fileBytes);
+                    mainEvent.picture = fileBytes;
+                }
+
+                //PlaceId
+                Place place = _context.Place.Where(x => x.name == mainEventView.name).FirstOrDefault();
+                if (place != null) mainEvent.PlaceId = place.PlaceId;
+                else
+                {
+                    Place p = new Place
+                    {
+                        name = mainEventView.name,
+                        province = mainEventView.province,
+                        city = mainEventView.city,
+                        address = mainEventView.address,
+                        confirmed = false
+                    };
+                    _context.Add(p);
+                    _context.SaveChanges();
+                    Place pl = _context.Place.Where(x => x.name == mainEventView.name).FirstOrDefault();
+                    mainEvent.PlaceId = pl.PlaceId;
+                }
+
+                //Organizer
+                Organizer organizer = _context.Organizer.Where(x => x.name == mainEventView.OrganizerName).FirstOrDefault();
+                if (organizer != null) mainEvent.OrganizerId = organizer.OrganizerId;
+                else
+                {
+                    Organizer o = new Organizer
+                    {
+                        name=mainEventView.OrganizerName,
+                        confirmed=false
+                    };
+                    _context.Add(o);
+                    _context.SaveChanges();
+                    Organizer or = _context.Organizer.Where(x => x.name == mainEventView.OrganizerName).FirstOrDefault();
+                    mainEvent.OrganizerId = or.OrganizerId;
+                }
                 _context.Add(mainEvent);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "OrganizerId", mainEvent.OrganizerId);
-            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address", mainEvent.PlaceId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", mainEvent.UserId);
-            ViewBag.Miejsca = _context.Place.ToListAsync();
-            return View(mainEvent);
+            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "name", mainEventView.name);
+            var organizers = _context.Organizer.Where(x => x.confirmed == true).ToList();
+            ViewData["Organizers"] = organizers;
+            var miejsca = _context.Place.Where(x => x.confirmed == true).ToList();
+            ViewData["Miejsca"] = miejsca;
+            return View(mainEventView);
         }
 
         // GET: MainEvents/Edit/5
@@ -91,9 +154,11 @@ namespace EventsApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "OrganizerId", mainEvent.OrganizerId);
-            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address", mainEvent.PlaceId);
+            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "name", mainEvent.OrganizerId);
+            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "name", mainEvent.PlaceId);
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", mainEvent.UserId);
+            var miejsca = _context.Place.ToList();
+            ViewData["Miejsca"] = miejsca;
             return View(mainEvent);
         }
 
@@ -102,7 +167,7 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MainEventId,title,description,dateStart,dateEnd,freeTickets,PlaceId,name,province,city,address,type,UserId,OrganizerId")] MainEvent mainEvent)
+        public async Task<IActionResult> Edit(int id, [Bind("MainEventId,title,description,dateStart,dateEnd,freeTickets,minPrice,maxPrice,PlaceId,name,province,city,address,type,picture,UserId,OrganizerId")] MainEvent mainEvent)
         {
             if (id != mainEvent.MainEventId)
             {
@@ -129,9 +194,11 @@ namespace EventsApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "OrganizerId", mainEvent.OrganizerId);
-            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "address", mainEvent.PlaceId);
+            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "name", mainEvent.OrganizerId);
+            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "name", mainEvent.PlaceId);
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", mainEvent.UserId);
+            var miejsca = _context.Place.ToList();
+            ViewData["Miejsca"] = miejsca;
             return View(mainEvent);
         }
 

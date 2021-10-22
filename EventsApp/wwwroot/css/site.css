@@ -1,5 +1,47 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+
+.fa{
+    position:relative;
+    width:35px;
+    font-size:30px;
+    top:3px;
+}
+
+.main{
+    margin:0px;
+}
+
+.SingleEvent {
+    border: solid;
+    border-width: 2px;
+    border-color: black;
+    text-align: center;
+    margin-inline: auto;
+    height: 400px;
+    width: 400px;
+    margin: 15px;
+    padding: 0px;
+    float:left;
+    background-color:lightgreen;
+}
+
+.EventLink:hover {
+/*        -webkit-filter: opacity(.5);
+    filter: opacity(.5);*/
+    -webkit-filter: brightness(1.2);
+    filter: brightness(1.2);
+/*    -webkit-filter: saturate(6);
+    filter: saturate(6);*/
+}
+
+.MainPic {
+    text-align: left;
+}
+
+aside{
+    background-color:red;
+    height:600px;
+}
 
 a.navbar-brand {
   white-space: normal;
@@ -7,9 +49,17 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+#DateDiv, #CityDiv {
+    float: left;
+    align-content:center;
+}
+
+#TypeDiv{
+    align-content:center;
+}
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 .btn-primary {
@@ -61,7 +111,7 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
-  background-color:burlywood;
+  /*background-color:cornsilk;*/
 }
 .footer {
   position: absolute;
@@ -71,11 +121,13 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
-#bbb {
+#SearchDiv {
     background-color: bisque;
     border-style: solid;
     border-top-width: 5px;
     border-bottom-width: 5px;
     border-color: black;
     padding: 15px;
+    width:100%;
+    margin:0;
 }

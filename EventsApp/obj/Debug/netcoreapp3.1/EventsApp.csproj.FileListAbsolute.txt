@@ -476,6 +476,11 @@ D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\EventsApp.csproj.CopyCompl
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\EventsApp.dll
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\EventsApp.pdb
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\EventsApp.genruntimeconfig.cache
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Organizers\Create.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Organizers\Delete.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Organizers\Details.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Organizers\Edit.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Organizers\Index.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Create.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Delete.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\Details.cshtml.g.cs

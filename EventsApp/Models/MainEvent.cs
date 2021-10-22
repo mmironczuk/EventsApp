@@ -25,23 +25,16 @@ namespace EventsApp.Models
         [Required]
         [Display(Name ="Ilość biletów")]
         public int freeTickets { get; set; }
+        [Display(Name ="Minimalna cena biletów")]
+        public float minPrice { get; set; }
+        [Display(Name ="Maksymalna cena biletów")]
+        public float maxPrice { get; set; }
         [Required]
-        [Display(Name = "Miejsce odbywania się wydarzenia")]
         public int PlaceId { get; set; }
-        [Required]
-        [Display(Name = "Nazwa")]
-        public string name { get; set; }
-        [Required]
-        [Display(Name = "Województwo")]
-        public string province { get; set; }
-        [Required]
-        [Display(Name = "Miasto")]
-        public string city { get; set; }
-        [Required]
-        [Display(Name = "Adres")]
-        public string address { get; set; }
         [Display(Name ="Kategoria wydarzenia")]
         public string type { get; set; }
+        [Display(Name = "Zdjęcie")]
+        public byte[] picture { get; set; }
         public string UserId { get; set; }
         public int OrganizerId { get; set; }
         public virtual User User { get; set; }

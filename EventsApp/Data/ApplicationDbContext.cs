@@ -21,5 +21,6 @@ namespace EventsApp.Data
         public DbSet<Place> Place { get; set; }
         public DbSet<Ticket> Ticket { get; set; }
         public DbSet<User> User { get; set; }
+        public DbSet<EventsApp.Models.Organizer> Organizer { get; set; }
     }
 }

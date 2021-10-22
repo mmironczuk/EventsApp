@@ -54,23 +54,23 @@ namespace EventsApp.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [Display(Name="Login")]
+            [Required(ErrorMessage = "Podanie loginu jest wymagane")]
+            [Display(Name="Login*")]
             public string Login { get; set; }
-            [Required]
+            [Required(ErrorMessage = "Podanie emailu jest wymagane")]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "Email*")]
             public string Email { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Hasło")]
+            [Display(Name = "Hasło*")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Powtórz hasło")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Powtórz hasło*")]
+            [Compare("Password", ErrorMessage = "Hasła muszą być takie same")]
             public string ConfirmPassword { get; set; }
             [Display(Name = "Imię")]
             public string Name { get; set; }

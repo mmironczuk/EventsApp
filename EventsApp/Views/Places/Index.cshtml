@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.placeType)
+                @Html.DisplayNameFor(model => model.confirmed)
             </th>
             <th></th>
         </tr>
@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.address)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.placeType)
+                @Html.DisplayFor(modelItem => item.confirmed)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PlaceId">Edit</a> |

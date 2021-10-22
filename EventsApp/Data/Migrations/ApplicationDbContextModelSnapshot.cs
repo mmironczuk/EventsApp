@@ -15,7 +15,7 @@ namespace EventsApp.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.18")
+                .HasAnnotation("ProductVersion", "3.1.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -84,14 +84,6 @@ namespace EventsApp.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("city")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("dateEnd")
                         .HasColumnType("datetime2");
 
@@ -104,13 +96,14 @@ namespace EventsApp.Data.Migrations
                     b.Property<int>("freeTickets")
                         .HasColumnType("int");
 
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<float>("maxPrice")
+                        .HasColumnType("real");
 
-                    b.Property<string>("province")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<float>("minPrice")
+                        .HasColumnType("real");
+
+                    b.Property<byte[]>("picture")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("title")
                         .IsRequired()
@@ -165,10 +158,10 @@ namespace EventsApp.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("confirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("phone")
+                    b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("OrganizerId");
@@ -211,11 +204,11 @@ namespace EventsApp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("confirmed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("placeType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("province")

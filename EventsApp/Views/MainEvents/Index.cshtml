@@ -4,104 +4,130 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.dateStart)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.dateEnd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.freeTickets)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.province)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.city)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Place)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Organizer)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.dateStart)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.dateEnd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.freeTickets)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.province)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.city)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Place.address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Organizer.OrganizerId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MainEventId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MainEventId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MainEventId">Delete</a>
-            </td>
-        </tr>
+@foreach (var item in Model)
+{
+    <a class="EventLink" asp-controller="MainEvents" asp-action="Details" asp-route-id="@item.MainEventId">
+        <div class="SingleEvent text-center">
+            <h5><b>@item.title</b></h5>
+            @{
+                var base64 = Convert.ToBase64String(item.picture);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            }
+            <img src='@imgSrc' style="max-width:300px; max-height:300px;" />
+            <ul style="list-style-type:none;">
+                <li class="MainPic"><i class="fa fa-location-arrow"></i>@item.Place.name, @item.Place.city</li>
+                <li class="MainPic"><i class="fa fa-calendar"></i>@item.dateStart</li>
+            </ul>
+        </div>
+    </a>
 }
-    </tbody>
-</table>
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.dateStart)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.dateEnd)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.freeTickets)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.province)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.city)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.picture)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Place)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Organizer)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.dateStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.dateEnd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.freeTickets)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.province)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.city)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.type)
+                </td>
+                <td>
+                    @{
+                        var base64 = Convert.ToBase64String(item.picture);
+                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    }
+                    <img src='@imgSrc' style="max-width:100px; max-height:100px;" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Place.address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Organizer.OrganizerId)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.MainEventId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.MainEventId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MainEventId">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@

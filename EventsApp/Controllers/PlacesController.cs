@@ -54,7 +54,7 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlaceId,name,province,city,address,placeType")] Place place)
+        public async Task<IActionResult> Create([Bind("PlaceId,name,province,city,address,confirmed")] Place place)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PlaceId,name,province,city,address,placeType")] Place place)
+        public async Task<IActionResult> Edit(int id, [Bind("PlaceId,name,province,city,address,confirmed")] Place place)
         {
             if (id != place.PlaceId)
             {
