@@ -21,7 +21,8 @@ namespace EventsApp.Controllers
         public IActionResult Index()
         {
             //return View();
-            return RedirectToAction("Index","MainEvents");
+            if (User.IsInRole("Admin")) return RedirectToAction("ConfirmEvents", "MainEvents");
+            else return RedirectToAction("Index","MainEvents");
         }
 
         public IActionResult Privacy()

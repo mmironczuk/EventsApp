@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "pRI8XFeAff7emTERjbESXPJAaJFfhudIz2jFOq/KcHnGe0flmUcgIjMb0oJR3SK2GlYhc4QVVDeLwVg14d2jbQ==",
+  "dgSpecHash": "ubL1wBUggDsE9ZRz5wwmnN1sW934CzJaVd4R8qT5rwsQNdprxn9SpPIlnGY7+YTX9cDc8attZnqjRnus0lZ6ww==",
   "success": true,
   "projectFilePath": "D:\\GitHub\\EventsApp\\EmailService\\EmailService.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\mailkit\\2.12.0\\mailkit.2.12.0.nupkg.sha512",
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\mailkit\\2.15.0\\mailkit.2.15.0.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
-    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\mimekit\\2.12.0\\mimekit.2.12.0.nupkg.sha512",
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\mimekit\\2.15.1\\mimekit.2.15.1.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\portable.bouncycastle\\1.8.10\\portable.bouncycastle.1.8.10.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.reflection.typeextensions\\4.4.0\\system.reflection.typeextensions.4.4.0.nupkg.sha512",

@@ -4,51 +4,81 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - EventsApp</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>*@
+    <link rel="shortcut icon" type="image/ico" href="~/images/Ikona_bilety.png" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="shortcut icon" type="image/ico" href="~/images/Ikona_bilety.png" />
-    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">*@
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    @*<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>*@
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>*@
+    @*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>*@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark">
-            <button class="navbar-toggler d-block" type="button" data-toggle="collapse" data-target="#SearchDiv" style="margin-left:5px;margin-right:10px">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark" style="margin:0px">
+            @*<button class="navbar-toggler d-block" type="button" data-toggle="collapse" data-target="#SearchDiv" style="margin-left:5px;margin-right:10px">
+            <span class="navbar-toggler-icon"></span>
+        </button>*@
             <a class="navbar-brand" href="/MainEvents">
-                @*<img margin="4" src="~/images/icon.ico" />*@
                 <img margin="4" width="50px" src="~/images/Ikona_bilety.png" />
                 <span>EventsApp</span>
             </a>
-
-            <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fa fa-home"></i>
-                            <span style="margin:0px">Moje wydarzenia</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/MainEvents/Create">
-                            <i class="fa fa-plus"></i>Dodaj wydarzenie
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fa fa-calendar"></i>Mój terminarz
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Places/ConfirmPlace">
+                                <i class="fa fa-home"></i>
+                                <span style="margin:0px">Akceptacja miejsc</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Organizers/ConfirmOrganizer">
+                                <i class="fa fa-user"></i>Akceptacja organizatorów
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/MainEvents/ConfirmEvents">
+                                <i class="fa fa-calendar"></i>Akceptacja wydarzeń
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/MainEvents/MyEvents">
+                                <i class="fa fa-home"></i>
+                                <span style="margin:0px">Moje wydarzenia</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/MainEvents/Create">
+                                <i class="fa fa-plus"></i>Dodaj wydarzenie
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-calendar"></i>Mój terminarz
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            }
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                 <partial name="_LoginPartial" />
             </div>
         </nav>
-        <div class="collapse navbar-collapse row" id="SearchDiv">
+        @*<div class="collapse navbar-collapse row" id="SearchDiv">
             <div class="col-sm">
                 <div style="text-align:center">
                     <h3><b>Data wydarzenia:</b></h3>
@@ -84,12 +114,15 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div>*@
     </header>
-    <div class="container">
-        <main role="main">
-            @RenderBody()
-        </main>
+    @*<div class="container">
+            <main role="main">
+                @RenderBody()
+            </main>
+        </div>*@
+    <div class="MainPart">
+        @RenderBody()
     </div>
 
     <footer class="border-top footer text-muted">

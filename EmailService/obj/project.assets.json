@@ -2,10 +2,10 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "MailKit/2.12.0": {
+      "MailKit/2.15.0": {
         "type": "package",
         "dependencies": {
-          "MimeKit": "2.12.0"
+          "MimeKit": "2.15.0"
         },
         "compile": {
           "lib/netstandard2.1/MailKit.dll": {}
@@ -23,7 +23,7 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "MimeKit/2.12.0": {
+      "MimeKit/2.15.1": {
         "type": "package",
         "dependencies": {
           "Portable.BouncyCastle": "1.8.10",
@@ -120,10 +120,10 @@
     }
   },
   "libraries": {
-    "MailKit/2.12.0": {
-      "sha512": "YGjG1rHqTiyPZO3J/gWcBI1tOIMmSEALiEjf5i2YCUDkR4F+AEOyx/hNMP/99vPmpB6rxUdh/budN/tb3CcbCw==",
+    "MailKit/2.15.0": {
+      "sha512": "9ihv6pRmjmBEAP4eXlDeo9srFQF9dVtYP1/jzj3I3BV9tBRk66NLdAF+8jkgUtauMKmns0yBvtfMFiBnNkHKDQ==",
       "type": "package",
-      "path": "mailkit/2.12.0",
+      "path": "mailkit/2.15.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -149,7 +149,7 @@
         "lib/netstandard2.1/MailKit.dll",
         "lib/netstandard2.1/MailKit.pdb",
         "lib/netstandard2.1/MailKit.xml",
-        "mailkit.2.12.0.nupkg.sha512",
+        "mailkit.2.15.0.nupkg.sha512",
         "mailkit.nuspec"
       ]
     },
@@ -170,10 +170,10 @@
         "version.txt"
       ]
     },
-    "MimeKit/2.12.0": {
-      "sha512": "OB0sU/wk/Z0w8JBdtfdSme/trw0J7yWLivz+j/dO8KvfqQICkHL7oZVBRitFTlsTD68U62RNoUzrQ7zEiNtEoA==",
+    "MimeKit/2.15.1": {
+      "sha512": "JINoA9befTsiIGMKLcfPxPC7q1Di4XhJMDErYL1vyKUGRe91n/4GHgvwE04LmWy4uamvpfPkVCTyXmykEnZD0Q==",
       "type": "package",
-      "path": "mimekit/2.12.0",
+      "path": "mimekit/2.15.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -199,7 +199,7 @@
         "lib/netstandard2.1/MimeKit.dll",
         "lib/netstandard2.1/MimeKit.pdb",
         "lib/netstandard2.1/MimeKit.xml",
-        "mimekit.2.12.0.nupkg.sha512",
+        "mimekit.2.15.1.nupkg.sha512",
         "mimekit.nuspec"
       ]
     },
@@ -493,8 +493,8 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "MailKit >= 2.12.0",
-      "MimeKit >= 2.12.0"
+      "MailKit >= 2.15.0",
+      "MimeKit >= 2.15.1"
     ]
   },
   "packageFolders": {
@@ -538,11 +538,11 @@
         "dependencies": {
           "MailKit": {
             "target": "Package",
-            "version": "[2.12.0, )"
+            "version": "[2.15.0, )"
           },
           "MimeKit": {
             "target": "Package",
-            "version": "[2.12.0, )"
+            "version": "[2.15.1, )"
           }
         },
         "imports": [

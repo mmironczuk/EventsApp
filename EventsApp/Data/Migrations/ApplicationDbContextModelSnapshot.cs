@@ -84,6 +84,9 @@ namespace EventsApp.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("confirmed")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("dateEnd")
                         .HasColumnType("datetime2");
 
