@@ -1,0 +1,24 @@
+﻿@model IEnumerable<EventsApp.Models.Place>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@foreach (var item in Model)
+{
+    <div class="well">
+
+            <div class="media-body">
+                <h4 class="media-heading">@item.name</h4>
+                <p>@item.address, @item.province @item.city</p>
+            </div>
+            <div class="Gicons">
+                <a asp-action="AcceptPlace" asp-route-id="@item.PlaceId">
+                    <i class="glyphicon glyphicon-ok-sign" style="color:green;font-size:30px; margin:10px"></i>
+                </a>
+                <a asp-action="DeleteConfirmed" asp-route-id="@item.PlaceId">
+                    <i class="glyphicon glyphicon-remove-sign" style="color:red;font-size:30px; margin:10px"></i>
+                </a>
+            </div>
+    </div>
+}

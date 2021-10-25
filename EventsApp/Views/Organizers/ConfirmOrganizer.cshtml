@@ -1,0 +1,27 @@
+﻿@model IEnumerable<EventsApp.Models.Organizer>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@foreach (var item in Model)
+{
+    <div class="well">
+
+        <div class="media-body">
+            <h4 class="media-heading">@item.name</h4>
+            @foreach (var m in item.MainEvents)
+            {
+                <p>@m.title</p>
+            }
+        </div>
+        <div class="Gicons">
+            <a asp-action="AcceptOrganizer" asp-route-id="@item.OrganizerId">
+                <i class="glyphicon glyphicon-ok-sign" style="color:green;font-size:30px; margin:10px"></i>
+            </a>
+            <a asp-action="Delete" asp-route-id="@item.OrganizerId">
+                <i class="glyphicon glyphicon-remove-sign" style="color:red;font-size:30px; margin:10px"></i>
+            </a>
+        </div>
+    </div>
+}

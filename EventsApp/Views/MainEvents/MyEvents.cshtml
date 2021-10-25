@@ -1,0 +1,46 @@
+﻿@model IEnumerable<EventsApp.Models.MainEvent>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@foreach (var item in Model)
+{
+    <div class="well">
+        <div class="media">
+            @{
+                var base64 = Convert.ToBase64String(item.picture);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            }
+            <img class="media-object pull-left" src="@imgSrc" style="max-width:200px; max-height:200px;">
+            <div class="media-body">
+                <h4 class="media-heading">@item.title</h4>
+                <p class="text-justify">@item.description</p>
+                <ul class="list-inline list-unstyled">
+                    <li><span><i class="glyphicon glyphicon-calendar"></i>@item.dateStart</span></li>
+                    <li>|</li>
+                    <span><i class="glyphicon glyphicon-comment"></i> @item.Opinions.Count comments</span>
+                    <li>|</li>
+                    <li>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                    </li>
+                </ul>
+            </div>
+            <div class="Gicons">
+                <a asp-action="Details" asp-route-id="@item.MainEventId">
+                    <i class="glyphicon glyphicon-eye-open" style="color:green;font-size:30px;top:50%; margin:10px"></i>
+                </a>
+                <a asp-action="Edit" asp-route-id="@item.MainEventId">
+                    <i class="glyphicon glyphicon-pencil" style="color:cornflowerblue;font-size:30px;top:50%; margin:10px"></i>
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.MainEventId">
+                    <i class="glyphicon glyphicon-remove" style="color:red;font-size:30px;margin:10px"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+}
