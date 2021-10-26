@@ -8,26 +8,26 @@
     ".NETCoreApp,Version=v3.1": {
       "EmailService/1.0.0": {
         "dependencies": {
-          "MailKit": "2.12.0",
-          "MimeKit": "2.12.0"
+          "MailKit": "2.15.0",
+          "MimeKit": "2.15.1"
         },
         "runtime": {
           "EmailService.dll": {}
         }
       },
-      "MailKit/2.12.0": {
+      "MailKit/2.15.0": {
         "dependencies": {
-          "MimeKit": "2.12.0"
+          "MimeKit": "2.15.1"
         },
         "runtime": {
           "lib/netstandard2.1/MailKit.dll": {
-            "assemblyVersion": "2.12.0.0",
-            "fileVersion": "2.12.0.0"
+            "assemblyVersion": "2.15.0.0",
+            "fileVersion": "2.15.0.0"
           }
         }
       },
       "Microsoft.NETCore.Platforms/2.0.0": {},
-      "MimeKit/2.12.0": {
+      "MimeKit/2.15.1": {
         "dependencies": {
           "Portable.BouncyCastle": "1.8.10",
           "System.Buffers": "4.5.1",
@@ -37,8 +37,8 @@
         },
         "runtime": {
           "lib/netstandard2.1/MimeKit.dll": {
-            "assemblyVersion": "2.12.0.0",
-            "fileVersion": "2.12.0.0"
+            "assemblyVersion": "2.15.0.0",
+            "fileVersion": "2.15.1.0"
           }
         }
       },
@@ -85,12 +85,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "MailKit/2.12.0": {
+    "MailKit/2.15.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-YGjG1rHqTiyPZO3J/gWcBI1tOIMmSEALiEjf5i2YCUDkR4F+AEOyx/hNMP/99vPmpB6rxUdh/budN/tb3CcbCw==",
-      "path": "mailkit/2.12.0",
-      "hashPath": "mailkit.2.12.0.nupkg.sha512"
+      "sha512": "sha512-9ihv6pRmjmBEAP4eXlDeo9srFQF9dVtYP1/jzj3I3BV9tBRk66NLdAF+8jkgUtauMKmns0yBvtfMFiBnNkHKDQ==",
+      "path": "mailkit/2.15.0",
+      "hashPath": "mailkit.2.15.0.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/2.0.0": {
       "type": "package",
@@ -99,12 +99,12 @@
       "path": "microsoft.netcore.platforms/2.0.0",
       "hashPath": "microsoft.netcore.platforms.2.0.0.nupkg.sha512"
     },
-    "MimeKit/2.12.0": {
+    "MimeKit/2.15.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-OB0sU/wk/Z0w8JBdtfdSme/trw0J7yWLivz+j/dO8KvfqQICkHL7oZVBRitFTlsTD68U62RNoUzrQ7zEiNtEoA==",
-      "path": "mimekit/2.12.0",
-      "hashPath": "mimekit.2.12.0.nupkg.sha512"
+      "sha512": "sha512-JINoA9befTsiIGMKLcfPxPC7q1Di4XhJMDErYL1vyKUGRe91n/4GHgvwE04LmWy4uamvpfPkVCTyXmykEnZD0Q==",
+      "path": "mimekit/2.15.1",
+      "hashPath": "mimekit.2.15.1.nupkg.sha512"
     },
     "Portable.BouncyCastle/1.8.10": {
       "type": "package",

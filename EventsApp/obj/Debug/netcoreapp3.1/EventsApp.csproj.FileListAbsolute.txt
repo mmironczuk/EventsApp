@@ -491,3 +491,7 @@ D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Delete.
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Details.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Edit.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\Index.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\MyEvents.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\ConfirmEvents.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Places\ConfirmPlace.cshtml.g.cs
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Organizers\ConfirmOrganizer.cshtml.g.cs

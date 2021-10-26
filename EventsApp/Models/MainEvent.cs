@@ -35,6 +35,7 @@ namespace EventsApp.Models
         public string type { get; set; }
         [Display(Name = "Zdjęcie")]
         public byte[] picture { get; set; }
+        public bool confirmed { get; set; }
         public string UserId { get; set; }
         public int OrganizerId { get; set; }
         public virtual User User { get; set; }

@@ -130,8 +130,10 @@ namespace EventsApp.Controllers
             {
                 return NotFound();
             }
-
-            return View(place);
+            _context.Place.Remove(place);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ConfirmPlace");
+            //return View(place);
         }
 
         // POST: Places/Delete/5
@@ -148,6 +150,20 @@ namespace EventsApp.Controllers
         private bool PlaceExists(int id)
         {
             return _context.Place.Any(e => e.PlaceId == id);
+        }
+
+        public IActionResult ConfirmPlace()
+        {
+            var places = _context.Place.Where(x => x.confirmed == false).ToList();
+            return View(places);
+        }
+        public IActionResult AcceptPlace(int id)
+        {
+            Place place = _context.Place.Find(id);
+            place.confirmed = true;
+            _context.Update(place);
+            _context.SaveChanges();
+            return RedirectToAction("ConfirmPlace");
         }
     }
 }

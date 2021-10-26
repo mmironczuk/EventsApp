@@ -25,7 +25,7 @@ namespace EventsApp.Controllers
         // GET: MainEvents
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Event.Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User);
+            var applicationDbContext = _context.Event.Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Where(m=>m.confirmed==true);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -79,8 +79,9 @@ namespace EventsApp.Controllers
                     dateEnd = mainEventView.dateEnd,
                     freeTickets = mainEventView.freeTickets,
                     minPrice = mainEventView.minPrice,
-                    maxPrice=mainEventView.maxPrice,
+                    maxPrice = mainEventView.maxPrice,
                     type = mainEventView.type,
+                    confirmed = false
                 };
                 //UserId
                 User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
@@ -154,10 +155,10 @@ namespace EventsApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "name", mainEvent.OrganizerId);
-            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "name", mainEvent.PlaceId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", mainEvent.UserId);
-            var miejsca = _context.Place.ToList();
+            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "name");
+            var organizers = _context.Organizer.Where(x => x.confirmed == true).ToList();
+            ViewData["Organizers"] = organizers;
+            var miejsca = _context.Place.Where(x => x.confirmed == true).ToList();
             ViewData["Miejsca"] = miejsca;
             return View(mainEvent);
         }
@@ -194,10 +195,10 @@ namespace EventsApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizerId"] = new SelectList(_context.Set<Organizer>(), "OrganizerId", "name", mainEvent.OrganizerId);
-            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "name", mainEvent.PlaceId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", mainEvent.UserId);
-            var miejsca = _context.Place.ToList();
+            ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "name");
+            var organizers = _context.Organizer.Where(x => x.confirmed == true).ToList();
+            ViewData["Organizers"] = organizers;
+            var miejsca = _context.Place.Where(x => x.confirmed == true).ToList();
             ViewData["Miejsca"] = miejsca;
             return View(mainEvent);
         }
@@ -219,8 +220,11 @@ namespace EventsApp.Controllers
             {
                 return NotFound();
             }
-
-            return View(mainEvent);
+            _context.Event.Remove(mainEvent);
+            await _context.SaveChangesAsync();
+            if (User.IsInRole("Admin")) return RedirectToAction("ConfirmOrganizer");
+            //return View(mainEvent);
+            else return RedirectToAction("MyEvents");
         }
 
         // POST: MainEvents/Delete/5
@@ -237,6 +241,30 @@ namespace EventsApp.Controllers
         private bool MainEventExists(int id)
         {
             return _context.Event.Any(e => e.MainEventId == id);
+        }
+
+        [Authorize]
+        public IActionResult MyEvents()
+        {
+            User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+            string UserId = user.Id;
+            var events = _context.Event.Include(m => m.Organizer).Include(m => m.Place).Include(m=>m.Opinions).Where(x=>x.UserId==UserId).ToList();
+            return View(events);
+        }
+
+        public IActionResult ConfirmEvents()
+        {
+            var events = _context.Event.Include(m => m.Organizer).Include(m => m.Place).Where(x => x.confirmed==false).ToList();
+            return View(events);
+        }
+
+        public IActionResult AcceptEvent(int id)
+        {
+            MainEvent mevent = _context.Event.Find(id);
+            mevent.confirmed = true;
+            _context.Update(mevent);
+            _context.SaveChanges();
+            return RedirectToAction("ConfirmEvents");
         }
     }
 }

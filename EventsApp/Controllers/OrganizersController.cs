@@ -130,8 +130,10 @@ namespace EventsApp.Controllers
             {
                 return NotFound();
             }
-
-            return View(organizer);
+            _context.Organizer.Remove(organizer);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ConfirmOrganizer");
+            //return View(organizer);
         }
 
         // POST: Organizers/Delete/5
@@ -148,6 +150,20 @@ namespace EventsApp.Controllers
         private bool OrganizerExists(int id)
         {
             return _context.Organizer.Any(e => e.OrganizerId == id);
+        }
+
+        public IActionResult ConfirmOrganizer()
+        {
+            var organizers = _context.Organizer.Include(x=>x.MainEvents).Where(x => x.confirmed == false).ToList();
+            return View(organizers);
+        }
+        public IActionResult AcceptOrganizer(int id)
+        {
+            Organizer organizer = _context.Organizer.Find(id);
+            organizer.confirmed = true;
+            _context.Update(organizer);
+            _context.SaveChanges();
+            return RedirectToAction("ConfirmOrganizer");
         }
     }
 }
