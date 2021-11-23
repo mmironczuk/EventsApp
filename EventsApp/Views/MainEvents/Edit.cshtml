@@ -8,8 +8,9 @@
     <div class="col-md-4 text-center" style="margin-inline:auto">
         <h1 style="margin:20px"><b>Edycja wydarzenia</b></h1>
         <hr />
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MainEventId" />
             <div class="form-group">
                 <label asp-for="title" class="control-label"></label>
                 <input asp-for="title" class="form-control" />
@@ -45,25 +46,6 @@
                 <input asp-for="maxPrice" class="form-control" />
                 <span asp-validation-for="maxPrice" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="PlaceId" class="control-label"></label>
-                <select asp-for="PlaceId" class="form-control">
-                    @foreach (var p in ViewBag.Miejsca)
-                    {
-                        <option value="@p.PlaceId">@p.name</option>
-                    }
-                </select>
-                </div>*@
-            @*<div class="form-group">
-                    <label asp-for="PlaceId" class="control-label"></label>
-                    <input asp-for="PlaceId" class="form-control" type='text' list='listid' name="place">
-                    <datalist id='listid'>
-                        @foreach (var p in ViewBag.Miejsca)
-                        {
-                            <option value="@p.name" data-value="@p.PlaceId"></option>
-                        }
-                    </datalist>
-                </div>*@
             <div class="form-group">
                 <label asp-for="name" class="control-label"></label>
                 <input asp-for="name" class="form-control" type='text' list='listid'>
@@ -74,11 +56,16 @@
                     }
                 </datalist>
             </div>
-            @*<div class="form-group">
-                <label asp-for="name" class="control-label"></label>
-                <input asp-for="name" class="form-control" />
-                <span asp-validation-for="name" class="text-danger"></span>
-                </div>*@
+
+            <script>
+                window.inputs = {};
+                window.places = [];
+            </script>
+            @foreach (var p in ViewBag.Miejsca)
+            {
+                <script>window.places["@Html.Raw(p.name)"] = ["@Html.Raw(@p.address)", "@Html.Raw(@p.province)", "@Html.Raw(@p.city)"];</script>
+            }
+
             <div class="form-group">
                 <label asp-for="address" class="control-label"></label>
                 <input asp-for="address" class="form-control" />
@@ -110,6 +97,21 @@
                     <option value="łódzkie">łódzkie</option>
                 </select>
             </div>
+
+            <script>
+                window.inputs.name = document.getElementById("name");
+                window.inputs.address = document.getElementById("address");
+                window.inputs.city = document.getElementById("city");
+                window.inputs.province = document.getElementById("province");
+                window.inputs.name.addEventListener("change", function () {
+                    if (this.value in window.places) {
+                        window.inputs.address.value = window.places[this.value][0];
+                        window.inputs.city.value = window.places[this.value][2];
+                        window.inputs.province.value = window.places[this.value][1];
+                    }
+                });
+            </script>
+
             <div class="form-group">
                 <label asp-for="type" class="control-label"></label>
                 <select asp-for="type" class="form-control">
@@ -121,11 +123,6 @@
                     <option value="sport">Sport</option>
                 </select>
                 <span asp-validation-for="type" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="picture" class="control-label"></label>
-                <input asp-for="picture" class="form-control" />
-                <span asp-validation-for="picture" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OrganizerName" class="control-label"></label>
@@ -141,7 +138,7 @@
                 </datalist>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>

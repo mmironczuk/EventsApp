@@ -1,0 +1,64 @@
+﻿@model IEnumerable<EventsApp.Models.MainEvent>
+<div>
+    @foreach (var item in Model)
+    {
+        <div class="well">
+            <div class="media">
+                @{
+                    var base64 = Convert.ToBase64String(item.picture);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                }
+                <img class="media-object pull-left" src="@imgSrc" style="max-width:200px; max-height:200px;">
+                <div class="media-body">
+                    <h4 class="media-heading">@item.title</h4>
+                    <p id="HideLines">@item.description</p>
+                    <ul class="list-inline list-unstyled">
+                        <li><span><i class="glyphicon glyphicon-calendar"></i>@item.dateStart - @item.dateEnd</span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-user"></i>@item.Organizer.name</span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-map-marker"></i>@item.Place.name, @item.Place.city @item.Place.address </span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-usd"></i>@item.minPrice zł - @item.maxPrice zł</span></li>
+                    </ul>
+                </div>
+                <div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (ViewBag.favouriteEvents.Contains(item))
+                        {
+                            <a onclick="addToFav(@item.MainEventId)">
+                                <i class="Heart" id="EventHeart_@item.MainEventId" style="color:red"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a onclick="addToFav(@item.MainEventId)">
+                                <i class="Heart" id="EventHeart_@item.MainEventId"></i>
+                            </a>
+                        }
+                    }
+                </div>
+                <script>
+                            $(function () {
+                                $(".Heart").click(function () {
+                                    $(".Heart,.HeartSpan").toggleClass("press", 1000);
+                                });
+                            });
+                            function addToFav(EventId) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: '@Url.Action("AddToFavourite", "MainEvents")',
+                                    data: { id: EventId },
+                                    dataType: 'json',
+                                    success: function (result) {
+                                        $("#EventHeart_" + EventId).css('color', 'red');
+                                        console.log(EventId);
+                                    }
+                                })
+                            }
+                </script>
+            </div>
+        </div>
+    }
+</div>

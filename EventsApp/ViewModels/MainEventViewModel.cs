@@ -9,6 +9,7 @@ namespace EventsApp.ViewModels
 {
     public class MainEventViewModel
     {
+        public int MainEventId { get; set; }
         [Required]
         [Display(Name = "Tytuł")]
         public string title { get; set; }
@@ -45,6 +46,7 @@ namespace EventsApp.ViewModels
         public string type { get; set; }
         [Display(Name = "Zdjęcie")]
         public IFormFile picture { get; set; }
+        [Display(Name = "Organizator")]
         public string OrganizerName { get; set; }
     }
 }

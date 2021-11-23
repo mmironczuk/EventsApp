@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - EventsApp</title>
-    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>*@
     <link rel="shortcut icon" type="image/ico" href="~/images/Ikona_bilety.png" />
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -21,9 +20,6 @@
 <body>
     <header>
         <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark" style="margin:0px">
-            @*<button class="navbar-toggler d-block" type="button" data-toggle="collapse" data-target="#SearchDiv" style="margin-left:5px;margin-right:10px">
-            <span class="navbar-toggler-icon"></span>
-        </button>*@
             <a class="navbar-brand" href="/MainEvents">
                 <img margin="4" width="50px" src="~/images/Ikona_bilety.png" />
                 <span>EventsApp</span>
@@ -67,7 +63,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="/Favourites/Index">
                                 <i class="fa fa-calendar"></i>Mój terminarz
                             </a>
                         </li>
@@ -78,51 +74,28 @@
                 <partial name="_LoginPartial" />
             </div>
         </nav>
-        @*<div class="collapse navbar-collapse row" id="SearchDiv">
-            <div class="col-sm">
-                <div style="text-align:center">
-                    <h3><b>Data wydarzenia:</b></h3>
-                </div>
-                <div style="align-content:center">
-                    <div class="col-sm">
-                        <span>Data rozpoczęcia:</span>
-                        <input type="date" />
-                    </div>
-                    <div class="col-sm">
-                        <span>Data rozpoczęcia:</span>
-                        <input type="date" />
-                    </div>
-                </div>
+        <nav class="navbar navbar-expand-lg navbar-dark  own-nav" style="border-top:solid;border-width:2px; margin:0px; background-color:#777">
+            <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto" style="">
+                    <li class="nav-item active"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" data-abc="true">Wszystkie<span class="sr-only">(current)</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="muzyka" data-abc="true">Muzyka</a> </li>
+                    <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="teatr" data-abc="true">Teatr</a> </li>
+                    <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="religia" data-abc="true">Religia</a> </li>
+                    <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="nauka" data-abc="true">Nauka</a> </li>
+                    <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="sztuka" data-abc="true">Sztuka i kultura</a> </li>
+                    <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="sport" data-abc="true">Sport</a> </li>
+                </ul>
+                <form onsubmit="event.preventDefault()" class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                    <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+                </form>
             </div>
-            <div class="col-sm">
-                <div style="text-align:center">
-                    <h3><b>Miasto:</b></h3>
-                </div>
-                <div style="text-align:center">
-                    <ul>
-                        <li><a href=""></a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm">
-                <div style="text-align:center">
-                    <h3><b>Rodzaj:</b></h3>
-                </div>
-                <div style="text-align:center">
-                    <ul>
-                        <li><a href=""></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>*@
+        </nav>
     </header>
-    @*<div class="container">
+    <div class="container-fluid">
             <main role="main">
                 @RenderBody()
             </main>
-        </div>*@
-    <div class="MainPart">
-        @RenderBody()
     </div>
 
     <footer class="border-top footer text-muted">

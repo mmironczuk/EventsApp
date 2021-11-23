@@ -10,7 +10,7 @@ namespace EventsApp.Models
     {
         public int OpinionId { get; set; }
         public int MainEventId { get; set; }
-        public string AccountId { get; set; }
+        public string UserId { get; set; }
         [Display(Name ="Treść")]
         public string content { get; set; }
         public virtual MainEvent MainEvent { get; set; }

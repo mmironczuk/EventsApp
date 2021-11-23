@@ -10,6 +10,8 @@ using EventsApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using EventsApp.ViewModels;
 using System.IO;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 namespace EventsApp.Controllers
 {
@@ -23,10 +25,86 @@ namespace EventsApp.Controllers
         }
 
         // GET: MainEvents
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? type)
         {
-            var applicationDbContext = _context.Event.Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Where(m=>m.confirmed==true);
-            return View(await applicationDbContext.ToListAsync());
+            var grouped = _context.Event.Include(m => m.Organizer).Include(m => m.Place)
+                .Include(m => m.User).Include(m => m.Opinions).Where(m => m.confirmed == true && m.dateStart >= DateTime.Now).OrderByDescending(m => m.Opinions.Count).Take(5);
+            ViewBag.BestEvents = grouped.ToList();
+
+            List<MainEvent> favouriteEvents = new List<MainEvent>();
+            if (User.Identity.IsAuthenticated)
+            {
+                User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+                var favourites = _context.Favourites.Include(x => x.MainEvent).Where(x => x.UserId == user.Id).ToList();
+                foreach (Favourites f in favourites)
+                {
+                    favouriteEvents.Add(f.MainEvent);
+                }
+            }
+            ViewBag.favouriteEvents = favouriteEvents;
+
+            ViewBag.type = "none";
+            if (type != null) ViewBag.type = type;
+            if(type=="none"||type==null)
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now).Take(5);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else 
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now&&m.type==type);
+                return View(await applicationDbContext.ToListAsync());
+            }
+
+            
+        }
+
+        [Authorize]
+        public JsonResult AddToFavourite(int id)
+        {
+            User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+            Favourites fav = new Favourites
+            {
+                MainEventId=id,
+                UserId=user.Id
+            };
+            _context.Add(fav);
+            _context.SaveChanges();
+            return Json(new { success = true, msg = "Successful operation" });
+        }
+
+        public PartialViewResult SearchByProvince(string searchText, string category)
+        {
+            List<MainEvent> favouriteEvents = new List<MainEvent>();
+            if (User.Identity.IsAuthenticated)
+            {
+                User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+                var favourites = _context.Favourites.Include(x => x.MainEvent).Where(x => x.UserId == user.Id).ToList();
+                foreach (Favourites f in favourites)
+                {
+                    favouriteEvents.Add(f.MainEvent);
+                }
+            }
+            ViewBag.favouriteEvents = favouriteEvents;
+
+            if (category=="none")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now && m.Place.province == searchText).ToList();
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now && m.Place.province == searchText && m.type == category).ToList();
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
         }
 
         // GET: MainEvents/Details/5
@@ -150,17 +228,39 @@ namespace EventsApp.Controllers
                 return NotFound();
             }
 
-            var mainEvent = await _context.Event.FindAsync(id);
+            var mainEvent = _context.Event.Include(x=>x.Place)
+                .Include(x=>x.Organizer)
+                .Where(x=>x.MainEventId==id).FirstOrDefault();
+
             if (mainEvent == null)
             {
                 return NotFound();
             }
+
+            MainEventViewModel mainEventView = new MainEventViewModel
+            {
+                MainEventId=mainEvent.MainEventId,
+                title=mainEvent.title,
+                description=mainEvent.description,
+                dateStart=mainEvent.dateStart,
+                dateEnd=mainEvent.dateEnd,
+                freeTickets=mainEvent.freeTickets,
+                minPrice=mainEvent.minPrice,
+                maxPrice=mainEvent.maxPrice,
+                name=mainEvent.Place.name,
+                province=mainEvent.Place.province,
+                city=mainEvent.Place.city,
+                address=mainEvent.Place.address,
+                type=mainEvent.type,
+                OrganizerName=mainEvent.Organizer.name
+            };
+
             ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "name");
             var organizers = _context.Organizer.Where(x => x.confirmed == true).ToList();
             ViewData["Organizers"] = organizers;
             var miejsca = _context.Place.Where(x => x.confirmed == true).ToList();
             ViewData["Miejsca"] = miejsca;
-            return View(mainEvent);
+            return View(mainEventView);
         }
 
         // POST: MainEvents/Edit/5
@@ -168,9 +268,9 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MainEventId,title,description,dateStart,dateEnd,freeTickets,minPrice,maxPrice,PlaceId,name,province,city,address,type,picture,UserId,OrganizerId")] MainEvent mainEvent)
+        public async Task<IActionResult> Edit(int id, [Bind("MainEventId,title,description,dateStart,dateEnd,freeTickets,minPrice,maxPrice,name,province,city,address,type,OrganizerName")] MainEventViewModel mainEventView)
         {
-            if (id != mainEvent.MainEventId)
+            if (id != mainEventView.MainEventId)
             {
                 return NotFound();
             }
@@ -179,12 +279,55 @@ namespace EventsApp.Controllers
             {
                 try
                 {
-                    _context.Update(mainEvent);
+                    MainEvent mEvent = _context.Event.Find(mainEventView.MainEventId);
+                    mEvent.title = mainEventView.title;
+                    mEvent.description = mainEventView.description;
+                    mEvent.dateStart = mainEventView.dateStart;
+                    mEvent.dateEnd = mainEventView.dateEnd;
+                    mEvent.freeTickets = mainEventView.freeTickets;
+                    mEvent.minPrice = mainEventView.minPrice;
+                    mEvent.maxPrice = mainEventView.maxPrice;
+                    mEvent.type = mainEventView.type;
+
+                    Place place = _context.Place.Where(x => x.name == mainEventView.name).FirstOrDefault();
+                    if (place != null) mEvent.PlaceId = place.PlaceId;
+                    else
+                    {
+                        Place p = new Place
+                        {
+                            name=mainEventView.name,
+                            address=mainEventView.address,
+                            province=mainEventView.province,
+                            city=mainEventView.city,
+                            confirmed=false
+                        };
+                        _context.Add(p);
+                        _context.SaveChanges();
+                        place = _context.Place.Where(x => x.name == p.name).FirstOrDefault();
+                        mEvent.PlaceId = place.PlaceId;
+                    }
+
+                    Organizer organizer = _context.Organizer.Where(x => x.name == mainEventView.OrganizerName).FirstOrDefault();
+                    if (organizer != null) mEvent.OrganizerId = organizer.OrganizerId;
+                    else
+                    {
+                        Organizer o = new Organizer
+                        {
+                            name = mainEventView.OrganizerName,
+                            confirmed = false
+                        };
+                        _context.Add(o);
+                        _context.SaveChanges();
+                        Organizer or = _context.Organizer.Where(x => x.name == mainEventView.OrganizerName).FirstOrDefault();
+                        mEvent.OrganizerId = or.OrganizerId;
+                    }
+
+                    _context.Update(mEvent);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MainEventExists(mainEvent.MainEventId))
+                    if (!MainEventExists(mainEventView.MainEventId))
                     {
                         return NotFound();
                     }
@@ -193,14 +336,14 @@ namespace EventsApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(MyEvents));
             }
             ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "name");
             var organizers = _context.Organizer.Where(x => x.confirmed == true).ToList();
             ViewData["Organizers"] = organizers;
             var miejsca = _context.Place.Where(x => x.confirmed == true).ToList();
             ViewData["Miejsca"] = miejsca;
-            return View(mainEvent);
+            return View(mainEventView);
         }
 
         // GET: MainEvents/Delete/5

@@ -28,10 +28,6 @@
     box-shadow: 10px 10px 15px rgba(0,0,0,0.3);
 }
 
-.card-text {
-    /*height: 80px;*/
-}
-
 .card::before, .card::after {
     position: absolute;
     top: 0;
@@ -57,8 +53,9 @@
     transform: scale3d(1, 1, 1);
 }
 
-.own-nav{
-    background-color:#AAA;
+.own-nav {
+    background-color: #485461;
+    background-image: linear-gradient(315deg, #485461 0%, #28313b 74%);
 }
 
 .navbar {
@@ -76,29 +73,43 @@ a{
     color:black;
 }
 
+#HideLines{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+#ListaEventow{
+    margin-inline: auto;
+    align-content:center;
+    justify-content:center;
+}
+
+.PolandMap {
+    width: 20%;
+    float: left;
+}
+
 .MostInterestingEvents {
-    /*background-color: forestgreen;*/
+    background-color: white;
     height: 500px;
-    /*width:1520px;*/
     width: 100%;
-    margin-inline:auto;
-    margin-left:20px;
+    margin-inline: auto;
+    align-content: center;
 }
 
 .main {
     margin: 0px;
+
 }
 
 .MainPart{
     width:100%;
     margin:0px;
     padding:0px;
-}
-
-.container {
-    margin: 0px;
-    padding: 0px;
-    width: 1520px;
 }
 
 .SingleEvent {
@@ -112,17 +123,12 @@ a{
     margin: 15px;
     padding: 0px;
     font-size:15px;
-    /*float:left;*/
     background-color:antiquewhite;
 }
 
 .EventLink:hover {
-/*        -webkit-filter: opacity(.5);
-    filter: opacity(.5);*/
     -webkit-filter: brightness(1.2);
     filter: brightness(1.2);
-/*    -webkit-filter: saturate(6);
-    filter: saturate(6);*/
 }
 
 .MainPic {
@@ -200,9 +206,11 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-  /*background-color:cornsilk;*/
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-color: #b8c6db;
+    background-image: linear-gradient(315deg, #b8c6db 0%, #f5f7fa 74%);
+    /*background-color:cornsilk;*/
 }
 .footer {
   position: absolute;
@@ -484,3 +492,79 @@ Template sidebar
         .media-body h5 a:hover {
             color: #4782d3;
         }
+
+
+.Heart{
+    cursor: pointer;
+    padding: 10px 12px 8px;
+    background: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 0 15px;
+    color: #aaa;
+    transition: .2s;
+}
+
+    .Heart:hover {
+        color: #666;
+    }
+
+    .Heart:before {
+        font-family: fontawesome;
+        content: '\f004';
+        font-style: normal;
+    }
+
+/*.HeartSpan{
+    position: absolute;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    visibility: hidden;
+    transition: .6s;
+    z-index: -2;
+    font-size: 2px;
+    color: transparent;
+    font-weight: 400;
+}
+
+.Heart.press {
+    animation: size .4s;
+    color: #e23b3b;
+}
+
+.HeartSpan.press {
+    bottom: 120px;
+    font-size: 14px;
+    visibility: visible;
+    animation: fade 1s;
+}
+
+@keyframes fade {
+    0% {
+        color: #transparent;
+    }
+
+    50% {
+        color: #e23b3b;
+    }
+
+    100% {
+        color: #transparent;
+    }
+}
+
+@keyframes size {
+    0% {
+        padding: 10px 12px 8px;
+    }
+
+    50% {
+        padding: 14px 16px 12px;
+        margin-top: -4px;
+    }
+
+    100% {
+        padding: 10px 12px 8px;
+    }
+}*/

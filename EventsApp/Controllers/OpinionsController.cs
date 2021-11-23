@@ -22,7 +22,7 @@ namespace EventsApp.Controllers
         // GET: Opinions
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Opinion.Include(o => o.MainEvent);
+            var applicationDbContext = _context.Opinion.Include(o => o.MainEvent).Include(o => o.User);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,6 +36,7 @@ namespace EventsApp.Controllers
 
             var opinion = await _context.Opinion
                 .Include(o => o.MainEvent)
+                .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.OpinionId == id);
             if (opinion == null)
             {
@@ -48,7 +49,8 @@ namespace EventsApp.Controllers
         // GET: Opinions/Create
         public IActionResult Create()
         {
-            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "MainEventId");
+            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "title");
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id");
             return View();
         }
 
@@ -57,7 +59,7 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OpinionId,MainEventId,AccountId,content")] Opinion opinion)
+        public async Task<IActionResult> Create([Bind("OpinionId,MainEventId,UserId,content")] Opinion opinion)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +67,8 @@ namespace EventsApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "MainEventId", opinion.MainEventId);
+            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "title", opinion.MainEventId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", opinion.UserId);
             return View(opinion);
         }
 
@@ -82,7 +85,8 @@ namespace EventsApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "MainEventId", opinion.MainEventId);
+            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "title", opinion.MainEventId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", opinion.UserId);
             return View(opinion);
         }
 
@@ -91,7 +95,7 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OpinionId,MainEventId,AccountId,content")] Opinion opinion)
+        public async Task<IActionResult> Edit(int id, [Bind("OpinionId,MainEventId,UserId,content")] Opinion opinion)
         {
             if (id != opinion.OpinionId)
             {
@@ -118,7 +122,8 @@ namespace EventsApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "MainEventId", opinion.MainEventId);
+            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "title", opinion.MainEventId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", opinion.UserId);
             return View(opinion);
         }
 
@@ -132,6 +137,7 @@ namespace EventsApp.Controllers
 
             var opinion = await _context.Opinion
                 .Include(o => o.MainEvent)
+                .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.OpinionId == id);
             if (opinion == null)
             {

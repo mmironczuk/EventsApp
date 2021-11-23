@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EventsApp.Data;
 using EventsApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EventsApp.Controllers
 {
@@ -20,10 +21,19 @@ namespace EventsApp.Controllers
         }
 
         // GET: Favourites
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Favourites.Include(f => f.MainEvent);
-            return View(await applicationDbContext.ToListAsync());
+            User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+            //var applicationDbContext = _context.Favourites.Include(f => f.MainEvent).Include(f => f.User).Where(f=>f.UserId==user.Id);
+            List<MainEvent> applicationDbContext = new List<MainEvent>();
+            var favourites = _context.Favourites.Include(x => x.MainEvent).Include(x=>x.MainEvent.Organizer).Include(x=>x.MainEvent.Place).Include(x=>x.MainEvent.Opinions)
+                .Where(x => x.UserId == user.Id).ToList();
+            foreach (Favourites f in favourites)
+            {
+                applicationDbContext.Add(f.MainEvent);
+            }
+            return View(applicationDbContext);
         }
 
         // GET: Favourites/Details/5
@@ -36,6 +46,7 @@ namespace EventsApp.Controllers
 
             var favourites = await _context.Favourites
                 .Include(f => f.MainEvent)
+                .Include(f => f.User)
                 .FirstOrDefaultAsync(m => m.FavouritesId == id);
             if (favourites == null)
             {
@@ -48,7 +59,8 @@ namespace EventsApp.Controllers
         // GET: Favourites/Create
         public IActionResult Create()
         {
-            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "MainEventId");
+            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "title");
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id");
             return View();
         }
 
@@ -57,7 +69,7 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FavouritesId,MainEventId,AccountId")] Favourites favourites)
+        public async Task<IActionResult> Create([Bind("FavouritesId,MainEventId,UserId")] Favourites favourites)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +77,8 @@ namespace EventsApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "MainEventId", favourites.MainEventId);
+            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "title", favourites.MainEventId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", favourites.UserId);
             return View(favourites);
         }
 
@@ -82,7 +95,8 @@ namespace EventsApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "MainEventId", favourites.MainEventId);
+            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "title", favourites.MainEventId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", favourites.UserId);
             return View(favourites);
         }
 
@@ -91,7 +105,7 @@ namespace EventsApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FavouritesId,MainEventId,AccountId")] Favourites favourites)
+        public async Task<IActionResult> Edit(int id, [Bind("FavouritesId,MainEventId,UserId")] Favourites favourites)
         {
             if (id != favourites.FavouritesId)
             {
@@ -118,27 +132,33 @@ namespace EventsApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "MainEventId", favourites.MainEventId);
+            ViewData["MainEventId"] = new SelectList(_context.Event, "MainEventId", "title", favourites.MainEventId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", favourites.UserId);
             return View(favourites);
         }
 
         // GET: Favourites/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var favourites = await _context.Favourites
-                .Include(f => f.MainEvent)
-                .FirstOrDefaultAsync(m => m.FavouritesId == id);
-            if (favourites == null)
-            {
-                return NotFound();
-            }
-
-            return View(favourites);
+            //var favourites = await _context.Favourites
+            //    .Include(f => f.MainEvent)
+            //    .Include(f => f.User)
+            //    .FirstOrDefaultAsync(m => m.FavouritesId == id);
+            //if (favourites == null)
+            //{
+            //    return NotFound();
+            //}
+            User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+            var favourite = _context.Favourites.Where(x => x.MainEventId == id && x.UserId == user.Id).FirstOrDefault();
+            _context.Favourites.Remove(favourite);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+            //return View(favourites);
         }
 
         // POST: Favourites/Delete/5
@@ -146,9 +166,13 @@ namespace EventsApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var favourites = await _context.Favourites.FindAsync(id);
-            _context.Favourites.Remove(favourites);
-            await _context.SaveChangesAsync();
+            //var favourites = await _context.Favourites.FindAsync(id);
+            //_context.Favourites.Remove(favourites);
+            //await _context.SaveChangesAsync();
+            User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+            var favourite = _context.Favourites.Where(x => x.MainEventId == id && x.UserId == user.Id).FirstOrDefault();
+            _context.Favourites.Remove(favourite);
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
