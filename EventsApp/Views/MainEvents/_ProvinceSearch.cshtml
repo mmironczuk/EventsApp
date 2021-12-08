@@ -27,13 +27,13 @@
                     {
                         @if (ViewBag.favouriteEvents.Contains(item))
                         {
-                            <a onclick="addToFav(@item.MainEventId)">
+                            <a onclick="favAction(@item.MainEventId)">
                                 <i class="Heart" id="EventHeart_@item.MainEventId" style="color:red"></i>
                             </a>
                         }
                         else
                         {
-                            <a onclick="addToFav(@item.MainEventId)">
+                            <a onclick="favAction(@item.MainEventId)">
                                 <i class="Heart" id="EventHeart_@item.MainEventId"></i>
                             </a>
                         }
@@ -45,15 +45,19 @@
                                     $(".Heart,.HeartSpan").toggleClass("press", 1000);
                                 });
                             });
-                            function addToFav(EventId) {
+                            function favAction(EventId) {
                                 $.ajax({
                                     type: "POST",
-                                    url: '@Url.Action("AddToFavourite", "MainEvents")',
+                                    url: '@Url.Action("FavouriteAction", "MainEvents")',
                                     data: { id: EventId },
                                     dataType: 'json',
                                     success: function (result) {
-                                        $("#EventHeart_" + EventId).css('color', 'red');
-                                        console.log(EventId);
+                                        if (result.success) {
+                                            $("#EventHeart_" + EventId).css('color', 'red');
+                                        }
+                                        else {
+                                            $("#EventHeart_" + EventId).css('color', '#aaa');
+                                        }
                                     }
                                 })
                             }

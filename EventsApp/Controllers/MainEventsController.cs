@@ -64,17 +64,27 @@ namespace EventsApp.Controllers
         }
 
         [Authorize]
-        public JsonResult AddToFavourite(int id)
+        public JsonResult FavouriteAction(int id)
         {
             User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
-            Favourites fav = new Favourites
+            Favourites fav = _context.Favourites.Where(x => x.MainEventId == id && x.UserId == user.Id).FirstOrDefault();
+            if (fav != null)
             {
-                MainEventId=id,
-                UserId=user.Id
-            };
-            _context.Add(fav);
-            _context.SaveChanges();
-            return Json(new { success = true, msg = "Successful operation" });
+                _context.Remove(fav);
+                _context.SaveChanges();
+                return Json(new { success = false, msg = "Removed" });
+            }
+            else
+            {
+                fav = new Favourites
+                {
+                    UserId=user.Id,
+                    MainEventId=id
+                };
+                _context.Add(fav);
+                _context.SaveChanges();
+                return Json(new { success = true, msg = "Added" });
+            }
         }
 
         public PartialViewResult SearchByProvince(string searchText, string category)

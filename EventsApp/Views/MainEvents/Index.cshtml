@@ -6,7 +6,6 @@
     string cat = ViewBag.type;
 }
 <div class="container-fluid">
-    @*<br />*@
     <h4 class="text-center" style="margin:10px"><b>Najbliższe wydarzenia</b></h4>
     <div class="row">
         <div id="grdProvince" class="col-12 col-md-8"></div>
@@ -38,13 +37,13 @@
                             {
                                 @if (ViewBag.favouriteEvents.Contains(item))
                                 {
-                                    <a onclick="addToFav(@item.MainEventId)">
+                                    <a onclick="favAction(@item.MainEventId)">
                                         <i class="Heart" id="EventHeart_@item.MainEventId" style="color:red"></i>
                                     </a>
                                 }
                                 else
                                 {
-                                    <a onclick="addToFav(@item.MainEventId)">
+                                    <a onclick="favAction(@item.MainEventId)">
                                         <i class="Heart" id="EventHeart_@item.MainEventId"></i>
                                     </a>
                                 }
@@ -56,15 +55,19 @@
                                     $(".Heart,.HeartSpan").toggleClass("press", 1000);
                                 });
                             });
-                            function addToFav(EventId) {
+                            function favAction(EventId) {
                                 $.ajax({
                                     type: "POST",
-                                    url: '@Url.Action("AddToFavourite", "MainEvents")',
+                                    url: '@Url.Action("FavouriteAction", "MainEvents")',
                                     data: { id: EventId },
                                     dataType: 'json',
                                     success: function (result) {
-                                        $("#EventHeart_" + EventId).css('color', 'red');
-                                        console.log(EventId);
+                                        if (result.success) {
+                                            $("#EventHeart_" + EventId).css('color', 'red');
+                                        }
+                                        else {
+                                            $("#EventHeart_" + EventId).css('color', '#aaa');
+                                        }
                                     }
                                 })
                             }

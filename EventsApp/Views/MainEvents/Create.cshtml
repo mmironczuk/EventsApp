@@ -17,7 +17,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="description" class="control-label"></label>
-                <input asp-for="description" class="form-control" />
+                <textarea asp-for="description" class="form-control" style="scroll-behavior:auto; height:150px"></textarea>
                 <span asp-validation-for="description" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -116,7 +116,6 @@
                 <select asp-for="type" class="form-control">
                     <option value="muzyka">Muzyka</option>
                     <option value="teatr">Teatr</option>
-                    <option value="religia">Religia</option>
                     <option value="nauka">Nauka</option>
                     <option value="sztuka">Sztuka i kultura</option>
                     <option value="sport">Sport</option>
