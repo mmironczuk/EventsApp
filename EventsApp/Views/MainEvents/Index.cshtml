@@ -1,10 +1,40 @@
-﻿@model IEnumerable<EventsApp.Models.MainEvent>
+﻿@*@using PagedList.Mvc
+@model PagedList.IPagedList<EventsApp.Models.MainEvent>*@ 
+@model ICollection<EventsApp.Models.MainEvent>
 
 @{
     ViewData["Title"] = "Index";
     string pr = "pomorskie";
     string cat = ViewBag.type;
 }
+<style>
+    .ul.pagination {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+    }
+
+    ul.pagination li {
+        display: inline;
+    }
+
+        ul.pagination li a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+
+            ul.pagination li a.active {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            ul.pagination li a:hover:not(.active) {
+                background-color: #ddd;
+            }
+</style>
 <div class="container-fluid">
     <h4 class="text-center" style="margin:10px"><b>Najbliższe wydarzenia</b></h4>
     <div class="row">
@@ -81,9 +111,12 @@
             <p><b>województwo: </b><span id="ProvinceSpan">-</span></p>
             <p>
                 <b>kategoria: </b>
-                @if (ViewBag.type == "none") {<span id="TypeSpan">-</span>}
-                else if (ViewBag.type == "sztuka") {<span id="TypeSpan">sztuka i kultura</span>}
-                else {<span>@ViewBag.type</span>}
+                @if (ViewBag.type == "none")
+                {<span id="TypeSpan">-</span>}
+                else if (ViewBag.type == "sztuka")
+                {<span id="TypeSpan">sztuka i kultura</span>}
+                else
+                {<span>@ViewBag.type</span>}
             </p>
             <svg @*width="100mm"
                  height="85mm"*@
@@ -202,6 +235,10 @@
             </a>
         }
     </div>
+    @*<div class="pagination" style="margin-left: 400px">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+        of @Model.PageCount   @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+    </div>*@
 </div>
 <script>
     //pomorskie

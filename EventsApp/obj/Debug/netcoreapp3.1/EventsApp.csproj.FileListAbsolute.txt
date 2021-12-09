@@ -498,3 +498,6 @@ D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Opinions\Edit.
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Opinions\Index.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\Favourites\_CalendarPartial.cshtml.g.cs
 D:\GitHub\EventsApp\EventsApp\bin\Debug\netcoreapp3.1\AutoMapper.dll
+D:\GitHub\EventsApp\EventsApp\bin\Debug\netcoreapp3.1\PagedList.dll
+D:\GitHub\EventsApp\EventsApp\bin\Debug\netcoreapp3.1\PagedList.Mvc.dll
+D:\GitHub\EventsApp\EventsApp\obj\Debug\netcoreapp3.1\Razor\Views\MainEvents\_CommentView.cshtml.g.cs

@@ -12,6 +12,7 @@ using EventsApp.ViewModels;
 using System.IO;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using PagedList;
 
 namespace EventsApp.Controllers
 {
@@ -49,15 +50,21 @@ namespace EventsApp.Controllers
             {
                 var applicationDbContext = _context.Event
                     .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
-                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now).Take(5);
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now);
                 return View(await applicationDbContext.ToListAsync());
+                //var applicationDbContext = await _context.Event
+                //    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                //    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now).ToListAsync();
+
+                //return View(applicationDbContext.ToPagedList(1, 5));
             }
             else 
             {
-                var applicationDbContext = _context.Event
+                var applicationDbContext = await _context.Event
                     .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
-                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now&&m.type==type);
-                return View(await applicationDbContext.ToListAsync());
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now&&m.type==type).ToListAsync();
+
+                return View(applicationDbContext);
             }
 
             
@@ -117,6 +124,25 @@ namespace EventsApp.Controllers
             }
         }
 
+        public PartialViewResult CommentAction(int id, string content)
+        {
+            User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+            Opinion opinion = new Opinion
+            {
+                MainEventId = id,
+                UserId = user.Id,
+                content = content,
+                date=DateTime.Now
+            };
+            _context.Add(opinion);
+            _context.SaveChanges();
+
+            List<Opinion> applicationDbContext = new List<Opinion>();
+            applicationDbContext = _context.Opinion.Include(x=>x.User).Where(x => x.MainEventId == id).ToList();
+
+            return PartialView("_CommentView", applicationDbContext);
+        }
+
         // GET: MainEvents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -134,6 +160,10 @@ namespace EventsApp.Controllers
             {
                 return NotFound();
             }
+
+            List<Opinion> applicationDbContext = new List<Opinion>();
+            applicationDbContext = await _context.Opinion.Include(x => x.User).Where(x => x.MainEventId == id).ToListAsync();
+            ViewBag.Comments = applicationDbContext;
 
             return View(mainEvent);
         }

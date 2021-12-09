@@ -33,111 +33,200 @@
         <p>@Model.description</p>
     </div>
 </article>
-@*<h1>Details</h1>
+@*<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">*@
+<section class="content-item" id="comments">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                    <h3 class="pull-left">Nowy komentarz</h3>
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-sm-3 col-lg-2 hidden-xs">
+                                <img class="img-responsive" src="~/images/profilePng.png" alt="">
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-9 col-lg-10">
+                                <textarea class="form-control" id="message" placeholder="Twoja wiadomość" required=""></textarea>
+                                <a class="btn btn-dark" onclick="comAction(@Model.MainEventId)">Dodaj komentarz</a>
+                            </div>
+                        </div>
+                    </fieldset>
 
-    <div>
-        <h4>MainEvent</h4>
-        <hr />
-        <dl class="row">
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.title)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.title)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.description)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.description)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.dateStart)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.dateStart)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.dateEnd)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.dateEnd)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.freeTickets)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.freeTickets)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.minPrice)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.minPrice)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.maxPrice)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.maxPrice)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.name)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.name)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.province)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.province)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.city)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.city)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.address)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.address)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.type)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.type)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.picture)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.picture)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.User)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.User.Id)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.Place)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.Place.address)
-            </dd>
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.Organizer)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.Organizer.OrganizerId)
-            </dd>
-        </dl>
+                <h3>Komentarze</h3>
+                <div id="commentsUsers"></div>
+                <div id="firstComments">
+                    @if (ViewBag.Comments.Count > 0)
+                    {
+                        @foreach (var item in ViewBag.Comments)
+                        {
+                            <div class="media">
+                                <img class="media-object" src="~/images/profilePng.png" alt="">
+                                <div class="media-body">
+                                    <h4 class="media-heading">@item.User.UserName</h4>
+                                    <ul class="list-unstyled list-inline media-detail pull-left">
+                                        <li><i class="fa fa-calendar"></i>@item.date.ToShortTimeString()</li>
+                                    </ul>
+                                    <p>@item.content</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+                @*<div class="media">
+            <img class="media-object" src="~/images/profilePng.png" alt="">
+            <div class="media-body">
+                <h4 class="media-heading">John Doe</h4>
+                <ul class="list-unstyled list-inline media-detail pull-left">
+                    <li><i class="fa fa-calendar"></i>27/02/2014</li>
+                </ul>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+        </div>*@
+            </div>
+        </div>
     </div>
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.MainEventId">Edit</a> |
-        <a asp-action="Index">Back to List</a>
-    </div>*@
+</section>
+<script>
+    function comAction(EventId) {
+        var text = $('textarea#message').val();
+         $.ajax({
+           type: "GET",
+           url: '@Url.Action("CommentAction", "MainEvents")',
+           data: { id: EventId, content:text },
+           dataType: 'html',
+           success: function (res) {
+               $('#commentsUsers').html(res);
+               $('#firstComments').hide();
+               $('textarea#message').val("");
+           }   
+         })
+    }
+</script>
+<style>
+    .content-item {
+        padding: 20px 0;
+        background-color: #b8c6db;
+        background-image: linear-gradient(315deg, #b8c6db 0%, #f5f7fa 74%);
+    }
+
+        .content-item.grey {
+            background-color: #F0F0F0;
+            padding: 50px 0;
+            height: 100%;
+        }
+
+        .content-item h2 {
+            font-weight: 700;
+            font-size: 35px;
+            line-height: 45px;
+            text-transform: uppercase;
+            margin: 20px 0;
+        }
+
+        .content-item h3 {
+            font-weight: 400;
+            font-size: 20px;
+            color: #555555;
+            margin: 10px 0 15px;
+            padding: 0;
+        }
+
+    .content-headline {
+        height: 1px;
+        text-align: center;
+        margin: 20px 0 70px;
+    }
+
+        .content-headline h2 {
+            background-color: #FFFFFF;
+            display: inline-block;
+            margin: -20px auto 0;
+            padding: 0 20px;
+        }
+
+    .grey .content-headline h2 {
+        background-color: #F0F0F0;
+    }
+
+    .content-headline h3 {
+        font-size: 14px;
+        color: #AAAAAA;
+        display: block;
+    }
+
+
+    #comments {
+        box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);
+        background-color: #FFFFFF;
+    }
+
+        #comments form {
+            margin-bottom: 30px;
+        }
+
+        #comments .btn {
+            margin-top: 7px;
+        }
+
+        #comments form fieldset {
+            clear: both;
+        }
+
+        #comments form textarea {
+            height: 100px;
+        }
+
+        #comments .media {
+            border-top: 1px dashed #DDDDDD;
+            padding: 20px 0;
+            margin: 0;
+        }
+
+            #comments .media > .pull-left {
+                margin-right: 20px;
+            }
+
+            #comments .media img {
+                max-width: 100px;
+            }
+
+            #comments .media h4 {
+                margin: 0 0 10px;
+            }
+
+                #comments .media h4 span {
+                    font-size: 14px;
+                    float: right;
+                    color: #999999;
+                }
+
+            #comments .media p {
+                margin-bottom: 15px;
+                text-align: justify;
+            }
+
+        #comments .media-detail {
+            margin: 0;
+        }
+
+            #comments .media-detail li {
+                color: #AAAAAA;
+                font-size: 12px;
+                padding-right: 10px;
+                font-weight: 600;
+            }
+
+            #comments .media-detail a:hover {
+                text-decoration: underline;
+            }
+
+            #comments .media-detail li:last-child {
+                padding-right: 0;
+            }
+
+            #comments .media-detail li i {
+                color: #666666;
+                font-size: 15px;
+                margin-right: 10px;
+            }
+</style>
