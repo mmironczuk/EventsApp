@@ -44,6 +44,11 @@
                                 <i class="fa fa-calendar"></i>Akceptacja wydarzeń
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/MainEvents/AdminEvents">
+                                <i class="fa fa-calendar"></i>Zarządzanie wydarzeniami
+                            </a>
+                        </li>
                     </ul>
                 </div>
             }
@@ -67,6 +72,11 @@
                                 <i class="fa fa-calendar"></i>Mój terminarz
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Tickets/Index">
+                                <i class="fa fa-ticket"></i>Rezerwacje
+                            </a>
+                        </li>
                     </ul>
                 </div>
             }
@@ -80,14 +90,13 @@
                     <li class="nav-item active"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" data-abc="true">Wszystkie<span class="sr-only">(current)</span></a> </li>
                     <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="muzyka" data-abc="true">Muzyka</a> </li>
                     <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="teatr" data-abc="true">Teatr</a> </li>
-                    <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="religia" data-abc="true">Religia</a> </li>
                     <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="nauka" data-abc="true">Nauka</a> </li>
                     <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="sztuka" data-abc="true">Sztuka i kultura</a> </li>
                     <li class="nav-item"> <a class="nav-link" asp-controller="MainEvents" asp-action="Index" asp-route-type="sport" data-abc="true">Sport</a> </li>
                 </ul>
                 <form onsubmit="event.preventDefault()" class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                    <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" id="searchText" onchange="changeAction()">
+                    <a class="btn btn-primary my-2 my-sm-0" id="btnSearch">Search</a>
                 </form>
             </div>
         </nav>
@@ -103,6 +112,13 @@
             &copy; 2021 - EventsApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    <script>
+        var el = document.getElementById("btnSearch"); //cache the save button
+        el.addEventListener("click", function () {
+            dataText = document.getElementById('searchText').value;
+            window.location.href = "MainEvents?searchText=" + dataText;
+        }, false);
+    </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

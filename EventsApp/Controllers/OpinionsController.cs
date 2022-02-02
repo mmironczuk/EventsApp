@@ -143,8 +143,12 @@ namespace EventsApp.Controllers
             {
                 return NotFound();
             }
+            int redirectId = opinion.MainEventId;
+            _context.Remove(opinion);
+            await _context.SaveChangesAsync();
 
-            return View(opinion);
+            return RedirectToAction("Details", "MainEvents", new { id = redirectId });
+            //return View(opinion);
         }
 
         // POST: Opinions/Delete/5

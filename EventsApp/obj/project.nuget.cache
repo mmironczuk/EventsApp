@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "7TQ/51zYyeWWTpAq6cqZ+xMJYcmQ95qcY88tnQFddsOlCUa7TXdBMqugLfNUNL3YUs9wrqbXz9vzRlcKefsxiA==",
+  "dgSpecHash": "TJfz5njBf+2+2AYp3AdoAnYJiMLuG9qKqmdRA32MImGYGZ5rv5Z9EqC3aAHN8PWIcBT9OdJJ3gVuozbvbPYJSw==",
   "success": true,
   "projectFilePath": "D:\\GitHub\\EventsApp\\EventsApp\\EventsApp.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\mailkit\\2.15.0\\mailkit.2.15.0.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\3.1.15\\microsoft.aspnetcore.cryptography.internal.3.1.15.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\3.1.15\\microsoft.aspnetcore.cryptography.keyderivation.3.1.15.nupkg.sha512",
@@ -131,7 +132,7 @@
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.objectmodel\\4.3.0\\system.objectmodel.4.3.0.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.private.datacontractserialization\\4.3.0\\system.private.datacontractserialization.4.3.0.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
-    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.reflection.emit\\4.3.0\\system.reflection.emit.4.3.0.nupkg.sha512",
+    "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.reflection.emit.ilgeneration\\4.3.0\\system.reflection.emit.ilgeneration.4.3.0.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.reflection.emit.lightweight\\4.3.0\\system.reflection.emit.lightweight.4.3.0.nupkg.sha512",
     "C:\\Users\\MichalMironczuk\\.nuget\\packages\\system.reflection.extensions\\4.3.0\\system.reflection.extensions.4.3.0.nupkg.sha512",

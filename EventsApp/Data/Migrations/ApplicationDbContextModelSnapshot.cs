@@ -15,33 +15,9 @@ namespace EventsApp.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.20")
+                .HasAnnotation("ProductVersion", "3.1.21")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("EventsApp.Models.Album", b =>
-                {
-                    b.Property<int>("AlbumId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("MainEventId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AlbumId");
-
-                    b.HasIndex("MainEventId");
-
-                    b.ToTable("Album");
-                });
 
             modelBuilder.Entity("EventsApp.Models.Favourites", b =>
                 {
@@ -49,9 +25,6 @@ namespace EventsApp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AccountId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MainEventId")
                         .HasColumnType("int");
@@ -133,9 +106,6 @@ namespace EventsApp.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AccountId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("MainEventId")
                         .HasColumnType("int");
 
@@ -144,6 +114,9 @@ namespace EventsApp.Data.Migrations
 
                     b.Property<string>("content")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("OpinionId");
 
@@ -170,26 +143,6 @@ namespace EventsApp.Data.Migrations
                     b.HasKey("OrganizerId");
 
                     b.ToTable("Organizer");
-                });
-
-            modelBuilder.Entity("EventsApp.Models.Photo", b =>
-                {
-                    b.Property<int>("PhotoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AlbumId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("photo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PhotoId");
-
-                    b.HasIndex("AlbumId");
-
-                    b.ToTable("Photo");
                 });
 
             modelBuilder.Entity("EventsApp.Models.Place", b =>
@@ -223,46 +176,6 @@ namespace EventsApp.Data.Migrations
                     b.ToTable("Place");
                 });
 
-            modelBuilder.Entity("EventsApp.Models.Tag", b =>
-                {
-                    b.Property<int>("TagId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("group")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TagId");
-
-                    b.ToTable("Tag");
-                });
-
-            modelBuilder.Entity("EventsApp.Models.TagEvent", b =>
-                {
-                    b.Property<int>("TagEventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("MainEventId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TagEventId");
-
-                    b.HasIndex("MainEventId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("TagEvent");
-                });
-
             modelBuilder.Entity("EventsApp.Models.Ticket", b =>
                 {
                     b.Property<int>("TicketId")
@@ -270,17 +183,11 @@ namespace EventsApp.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AccountId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("MainEventId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("cost")
-                        .HasColumnType("float");
 
                     b.HasKey("TicketId");
 
@@ -500,15 +407,6 @@ namespace EventsApp.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("EventsApp.Models.Album", b =>
-                {
-                    b.HasOne("EventsApp.Models.MainEvent", "MainEvent")
-                        .WithMany()
-                        .HasForeignKey("MainEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("EventsApp.Models.Favourites", b =>
                 {
                     b.HasOne("EventsApp.Models.MainEvent", "MainEvent")
@@ -552,30 +450,6 @@ namespace EventsApp.Data.Migrations
                     b.HasOne("EventsApp.Models.User", "User")
                         .WithMany("Opinions")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("EventsApp.Models.Photo", b =>
-                {
-                    b.HasOne("EventsApp.Models.Album", "Album")
-                        .WithMany("Photos")
-                        .HasForeignKey("AlbumId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EventsApp.Models.TagEvent", b =>
-                {
-                    b.HasOne("EventsApp.Models.MainEvent", "MainEvent")
-                        .WithMany("TagEvents")
-                        .HasForeignKey("MainEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EventsApp.Models.Tag", "Tag")
-                        .WithMany("TagEvents")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("EventsApp.Models.Ticket", b =>

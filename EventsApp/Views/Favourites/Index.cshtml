@@ -4,36 +4,30 @@
     ViewData["Title"] = "Index";
 }
 
-@foreach (var item in Model)
-{
-    <div class="well">
-        <div class="media">
-            @{
-                var base64 = Convert.ToBase64String(item.picture);
-                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.10.1/main.min.css,npm/fullcalendar@5.10.1/main.min.css" />
+<script src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.10.1,npm/fullcalendar@5.10.1/main.min.js,npm/fullcalendar@5.10.1/locales-all.min.js,npm/fullcalendar@5.10.1/locales-all.min.js"></script>
+
+<div id='calendar'></div>
+
+<script>
+    function GetData() {
+        $.ajax({
+            type: 'GET',
+            url: "/Favourites/GetCalendarData",
+            success: function (eventsList) {
+                var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    windowResize: false,
+                    events: eventsList
+                });
+                calendar.render();
+            },
+            error: function (error) {
+                alert('Failed');
             }
-            <img class="media-object pull-left" src="@imgSrc" style="max-width:200px; max-height:200px;">
-            <div class="media-body">
-                <h4 class="media-heading">@item.title</h4>
-                <p class="text-justify">@item.description</p>
-                <ul class="list-inline list-unstyled">
-                    <li><span><i class="glyphicon glyphicon-calendar"></i>@item.dateStart</span></li>
-                    <li>|</li>
-                    <span><i class="glyphicon glyphicon-comment"></i> @item.Opinions.Count comments</span>
-                    <li>|</li>
-                    <li><span><i class="glyphicon glyphicon-map-marker"></i>@item.Place.name, @item.Place.city @item.Place.address </span></li>
-                    <li>|</li>
-                    <li><span><i class="glyphicon glyphicon-usd"></i>@item.minPrice zł - @item.maxPrice zł</span></li>
-                </ul>
-            </div>
-            <div class="Gicons">
-                <a asp-action="Details" asp-controller="MainEvents" asp-route-id="@item.MainEventId">
-                    <i class="glyphicon glyphicon-eye-open" style="color:green;font-size:30px;top:50%; margin:10px"></i>
-                </a>
-                <a asp-action="Delete" asp-route-id="@item.MainEventId">
-                    <i class="glyphicon glyphicon-remove" style="color:red;font-size:30px;margin:10px"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-}
+        })
+    }
+    GetData();
+</script>

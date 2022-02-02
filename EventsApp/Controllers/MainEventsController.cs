@@ -12,6 +12,7 @@ using EventsApp.ViewModels;
 using System.IO;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
 
 namespace EventsApp.Controllers
 {
@@ -19,16 +20,18 @@ namespace EventsApp.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+
         public MainEventsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // GET: MainEvents
-        public async Task<IActionResult> Index(string? type)
+        public async Task<IActionResult> Index(string type, string searchText)
         {
             var grouped = _context.Event.Include(m => m.Organizer).Include(m => m.Place)
                 .Include(m => m.User).Include(m => m.Opinions).Where(m => m.confirmed == true && m.dateStart >= DateTime.Now).OrderByDescending(m => m.Opinions.Count).Take(5);
+            
             ViewBag.BestEvents = grouped.ToList();
 
             List<MainEvent> favouriteEvents = new List<MainEvent>();
@@ -41,44 +44,79 @@ namespace EventsApp.Controllers
                     favouriteEvents.Add(f.MainEvent);
                 }
             }
+
             ViewBag.favouriteEvents = favouriteEvents;
 
             ViewBag.type = "none";
+
+            ViewBag.CurrentPageIndex = 1;
+
             if (type != null) ViewBag.type = type;
-            if(type=="none"||type==null)
+            
+            if((type == "none" || type == null)&&searchText==null)
             {
-                var applicationDbContext = _context.Event
+                var applicationDbContext = await _context.Event
                     .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
-                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now).Take(5);
-                return View(await applicationDbContext.ToListAsync());
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now).OrderBy(x => x.dateStart).Take(5).ToListAsync();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return View(applicationDbContext);
+            }
+            else if(type=="none"||type==null)
+            {
+                var applicationDbContext = _context.Event.Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(x => x.title.Contains(searchText) && x.dateStart >= DateTime.Now).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return View(applicationDbContext);
             }
             else 
             {
-                var applicationDbContext = _context.Event
+                var applicationDbContext = await _context.Event
                     .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
-                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now&&m.type==type);
-                return View(await applicationDbContext.ToListAsync());
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now&&m.type==type).OrderBy(x => x.dateStart).Take(5).ToListAsync();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return View(applicationDbContext);
             }
+        }
 
-            
+        public async Task<IActionResult> AdminEvents()
+        {
+            var events = await _context.Event.Include(x=>x.Opinions).Where(x=>x.confirmed==true).ToListAsync();
+            return View(events);
+        }
+
+        public ActionResult ActionSearchText(string searchText)
+        {
+            return RedirectToAction("Index", new { searchText = searchText });
         }
 
         [Authorize]
-        public JsonResult AddToFavourite(int id)
+        public JsonResult FavouriteAction(int id)
         {
             User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
-            Favourites fav = new Favourites
+            Favourites fav = _context.Favourites.Where(x => x.MainEventId == id && x.UserId == user.Id).FirstOrDefault();
+            if (fav != null)
             {
-                MainEventId=id,
-                UserId=user.Id
-            };
-            _context.Add(fav);
-            _context.SaveChanges();
-            return Json(new { success = true, msg = "Successful operation" });
+                _context.Remove(fav);
+                _context.SaveChanges();
+                return Json(new { success = false, msg = "Removed" });
+            }
+            else
+            {
+                fav = new Favourites
+                {
+                    UserId=user.Id,
+                    MainEventId=id
+                };
+                _context.Add(fav);
+                _context.SaveChanges();
+                return Json(new { success = true, msg = "Added" });
+            }
         }
 
-        public PartialViewResult SearchByProvince(string searchText, string category)
+        public PartialViewResult SearchAction(string searchText, string category, string dateStart, string dateEnd)
         {
+            ViewBag.CurrentPageIndex = 1;
+
             List<MainEvent> favouriteEvents = new List<MainEvent>();
             if (User.Identity.IsAuthenticated)
             {
@@ -91,29 +129,239 @@ namespace EventsApp.Controllers
             }
             ViewBag.favouriteEvents = favouriteEvents;
 
-            if (category=="none")
+            ViewBag.province = searchText;
+
+            ViewBag.dateStart = dateStart;
+            ViewBag.dateEnd = dateEnd;
+
+            if (category != null) ViewBag.type = category;
+            else ViewBag.type = "none";
+
+            DateTime dateChooseStart=DateTime.Now, dateChooseEnd = DateTime.Now;
+
+            if (dateStart!="temp")
+            {
+                dateChooseStart = DateTime.Parse(dateStart);
+                dateChooseEnd = DateTime.Parse(dateEnd);
+            }
+
+
+            if(category == "none" && searchText == "temp" && dateStart=="temp")
             {
                 var applicationDbContext = _context.Event
                     .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
-                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now && m.Place.province == searchText).ToList();
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now)
+                    .OrderBy(x => x.dateStart).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            if (category == "none" && searchText == "temp")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= dateChooseStart && m.dateStart <= dateChooseEnd)
+                    .OrderBy(x => x.dateStart).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else if (category == "none" && dateStart=="temp")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now && m.Place.province == searchText)
+                    .OrderBy(x => x.dateStart).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else if (searchText == "temp" && dateStart == "temp")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now && m.type == category)
+                    .OrderBy(x => x.dateStart).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else if (searchText == "temp")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= dateChooseStart && m.dateStart <= dateChooseEnd && m.type == category)
+                    .OrderBy(x => x.dateStart).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else if (dateStart == "temp")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now && m.type == category && m.Place.province == searchText)
+                    .OrderBy(x => x.dateStart).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else if (category == "none")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= dateChooseStart && m.dateStart <= dateChooseEnd && m.Place.province == searchText)
+                    .OrderBy(x => x.dateStart).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
                 return PartialView("_ProvinceSearch", applicationDbContext);
             }
             else
             {
                 var applicationDbContext = _context.Event
                     .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
-                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now && m.Place.province == searchText && m.type == category).ToList();
+                    .Where(m => m.confirmed == true && m.dateStart >= dateChooseStart && m.dateStart <= dateChooseEnd && m.Place.province == searchText && m.type == category)
+                    .OrderBy(x => x.dateStart).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
                 return PartialView("_ProvinceSearch", applicationDbContext);
             }
+        }
+
+        public PartialViewResult PaginationAction(string searchText, string category, int currentPageIndex, string dateStart, string dateEnd)
+        {
+            int startIndex = (currentPageIndex * 5);
+            int endIndex = startIndex + 5 - 1;
+
+            ViewBag.CurrentPageIndex = currentPageIndex + 1;
+
+            List<MainEvent> favouriteEvents = new List<MainEvent>();
+            if (User.Identity.IsAuthenticated)
+            {
+                User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+                var favourites = _context.Favourites.Include(x => x.MainEvent).Where(x => x.UserId == user.Id).ToList();
+                foreach (Favourites f in favourites)
+                {
+                    favouriteEvents.Add(f.MainEvent);
+                }
+            }
+            ViewBag.favouriteEvents = favouriteEvents;
+
+            ViewBag.province = searchText;
+
+            ViewBag.type = category;
+
+            ViewBag.dateStart = dateStart;
+            ViewBag.dateEnd = dateEnd;
+
+            DateTime dateChooseStart = DateTime.Now, dateChooseEnd = DateTime.Now;
+
+            if (dateStart != "temp")
+            {
+                dateChooseStart = DateTime.Parse(dateStart);
+                dateChooseEnd = DateTime.Parse(dateEnd);
+            }
+
+
+            if (category == "none" && searchText == "temp" && dateStart == "temp")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now)
+                    .OrderBy(x => x.dateStart).Skip(startIndex).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else if (category == "none" && searchText == "temp")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= dateChooseStart && m.dateStart <= dateChooseEnd)
+                    .OrderBy(x => x.dateStart).Skip(startIndex).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else if (category == "none" && dateStart == "temp")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now && m.Place.province == searchText)
+                    .OrderBy(x => x.dateStart).Skip(startIndex).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else if (searchText == "temp" && dateStart == "temp")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now && m.type == category)
+                    .OrderBy(x => x.dateStart).Skip(startIndex).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else if (searchText == "temp")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= dateChooseStart && m.dateStart <= dateChooseEnd && m.type == category)
+                    .OrderBy(x => x.dateStart).Skip(startIndex).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else if (dateStart == "temp")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= DateTime.Now && m.type == category && m.Place.province == searchText)
+                    .OrderBy(x => x.dateStart).Skip(startIndex).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else if (category == "none")
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= dateChooseStart && m.dateStart <= dateChooseEnd && m.Place.province == searchText)
+                    .OrderBy(x => x.dateStart).Skip(startIndex).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+            else
+            {
+                var applicationDbContext = _context.Event
+                    .Include(m => m.Organizer).Include(m => m.Place).Include(m => m.User).Include(m => m.Opinions)
+                    .Where(m => m.confirmed == true && m.dateStart >= dateChooseStart && m.dateStart <= dateChooseEnd && m.Place.province == searchText && m.type == category)
+                    .OrderBy(x => x.dateStart).Skip(startIndex).Take(5).ToList();
+                ViewBag.LastPageIndex = (applicationDbContext.Count / 5) + 1;
+                return PartialView("_ProvinceSearch", applicationDbContext);
+            }
+        }
+
+        public PartialViewResult CommentAction(int id, string content)
+        {
+            User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+            Opinion opinion = new Opinion
+            {
+                MainEventId = id,
+                UserId = user.Id,
+                content = content,
+                date=DateTime.Now
+            };
+            _context.Add(opinion);
+            _context.SaveChanges();
+
+            List<Opinion> applicationDbContext = new List<Opinion>();
+            applicationDbContext = _context.Opinion.Include(x=>x.User).Where(x => x.MainEventId == id).ToList();
+
+            return PartialView("_CommentView", applicationDbContext);
         }
 
         // GET: MainEvents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
             if (id == null)
             {
                 return NotFound();
             }
+
+            Ticket ticket = null;
+            if (user != null) ticket = _context.Ticket.Where(x => x.MainEventId == id && x.UserId == user.Id).FirstOrDefault();
+
+            if (ticket == null) ViewBag.flag = false;
+            else ViewBag.flag = true;
 
             var mainEvent = await _context.Event
                 .Include(m => m.Organizer)
@@ -124,6 +372,11 @@ namespace EventsApp.Controllers
             {
                 return NotFound();
             }
+
+            List<Opinion> applicationDbContext = new List<Opinion>();
+            applicationDbContext = await _context.Opinion.Include(x => x.User).Where(x => x.MainEventId == id).ToListAsync();
+            ViewBag.Comments = applicationDbContext;
+            ViewBag.Id = mainEvent.MainEventId;
 
             return View(mainEvent);
         }
@@ -149,6 +402,7 @@ namespace EventsApp.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 MainEvent mainEvent = new MainEvent
                 {
                     title = mainEventView.title,
@@ -239,26 +493,26 @@ namespace EventsApp.Controllers
 
             MainEventViewModel mainEventView = new MainEventViewModel
             {
-                MainEventId=mainEvent.MainEventId,
-                title=mainEvent.title,
-                description=mainEvent.description,
-                dateStart=mainEvent.dateStart,
-                dateEnd=mainEvent.dateEnd,
-                freeTickets=mainEvent.freeTickets,
-                minPrice=mainEvent.minPrice,
-                maxPrice=mainEvent.maxPrice,
-                name=mainEvent.Place.name,
-                province=mainEvent.Place.province,
-                city=mainEvent.Place.city,
-                address=mainEvent.Place.address,
-                type=mainEvent.type,
-                OrganizerName=mainEvent.Organizer.name
+                MainEventId = mainEvent.MainEventId,
+                title = mainEvent.title,
+                description = mainEvent.description,
+                dateStart = mainEvent.dateStart,
+                dateEnd = mainEvent.dateEnd,
+                freeTickets = mainEvent.freeTickets,
+                minPrice = mainEvent.minPrice,
+                maxPrice = mainEvent.maxPrice,
+                name = mainEvent.Place.name,
+                province = mainEvent.Place.province,
+                city = mainEvent.Place.city,
+                address = mainEvent.Place.address,
+                type = mainEvent.type,
+                OrganizerName = mainEvent.Organizer.name
             };
 
             ViewData["PlaceId"] = new SelectList(_context.Place, "PlaceId", "name");
-            var organizers = _context.Organizer.Where(x => x.confirmed == true).ToList();
+            var organizers = await _context.Organizer.Where(x => x.confirmed == true).ToListAsync();
             ViewData["Organizers"] = organizers;
-            var miejsca = _context.Place.Where(x => x.confirmed == true).ToList();
+            var miejsca = await _context.Place.Where(x => x.confirmed == true).ToListAsync();
             ViewData["Miejsca"] = miejsca;
             return View(mainEventView);
         }
@@ -280,6 +534,7 @@ namespace EventsApp.Controllers
                 try
                 {
                     MainEvent mEvent = _context.Event.Find(mainEventView.MainEventId);
+
                     mEvent.title = mainEventView.title;
                     mEvent.description = mainEventView.description;
                     mEvent.dateStart = mainEventView.dateStart;

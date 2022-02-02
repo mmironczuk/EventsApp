@@ -1,64 +1,154 @@
 ﻿@model IEnumerable<EventsApp.Models.MainEvent>
+@{
+    string pr = ViewBag.province;
+    string cat = ViewBag.type;
+    string dateStartBuff = ViewBag.dateStart;
+    string dateEndBuff = ViewBag.dateEnd;
+}
+<style>
+    a, a:hover, a:focus, a:active {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .well {
+        transition: 0.5s;
+    }
+
+        .well:hover {
+            transform: scale(1.02);
+            box-shadow: 7px 7px 10px rgba(0,0,0,0.3);
+        }
+
+        .well::before {
+            transform: scale3d(0, 0, 1);
+            transform-origin: left top;
+            transition: transform .3s ease-out 0s;
+        }
+
+        .well::after {
+            transform: scale3d(0, 0, 1);
+            transform-origin: right bottom;
+            transition: transform .3s ease-out 0s;
+        }
+
+        .well:hover::before, .well:hover::after, .well:focus::before, .well:focus::after {
+            transform: scale3d(1, 1, 1);
+        }
+</style>
 <div>
     @foreach (var item in Model)
     {
-        <div class="well">
-            <div class="media">
-                @{
-                    var base64 = Convert.ToBase64String(item.picture);
-                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                }
-                <img class="media-object pull-left" src="@imgSrc" style="max-width:200px; max-height:200px;">
-                <div class="media-body">
-                    <h4 class="media-heading">@item.title</h4>
-                    <p id="HideLines">@item.description</p>
-                    <ul class="list-inline list-unstyled">
-                        <li><span><i class="glyphicon glyphicon-calendar"></i>@item.dateStart - @item.dateEnd</span></li>
-                        <li>|</li>
-                        <li><span><i class="glyphicon glyphicon-user"></i>@item.Organizer.name</span></li>
-                        <li>|</li>
-                        <li><span><i class="glyphicon glyphicon-map-marker"></i>@item.Place.name, @item.Place.city @item.Place.address </span></li>
-                        <li>|</li>
-                        <li><span><i class="glyphicon glyphicon-usd"></i>@item.minPrice zł - @item.maxPrice zł</span></li>
-                    </ul>
-                </div>
-                <div>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        @if (ViewBag.favouriteEvents.Contains(item))
-                        {
-                            <a onclick="addToFav(@item.MainEventId)">
-                                <i class="Heart" id="EventHeart_@item.MainEventId" style="color:red"></i>
-                            </a>
-                        }
-                        else
-                        {
-                            <a onclick="addToFav(@item.MainEventId)">
-                                <i class="Heart" id="EventHeart_@item.MainEventId"></i>
-                            </a>
-                        }
+        <a asp-controller="MainEvents" asp-action="Details" asp-route-id="@item.MainEventId">
+            <div class="well">
+                <div class="media">
+                    @{
+                        var base64 = Convert.ToBase64String(item.picture);
+                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
                     }
-                </div>
-                <script>
-                            $(function () {
-                                $(".Heart").click(function () {
-                                    $(".Heart,.HeartSpan").toggleClass("press", 1000);
-                                });
-                            });
-                            function addToFav(EventId) {
-                                $.ajax({
-                                    type: "POST",
-                                    url: '@Url.Action("AddToFavourite", "MainEvents")',
-                                    data: { id: EventId },
-                                    dataType: 'json',
-                                    success: function (result) {
-                                        $("#EventHeart_" + EventId).css('color', 'red');
-                                        console.log(EventId);
-                                    }
-                                })
+                    <img class="media-object pull-left" src="@imgSrc" style="max-width:200px; max-height:200px;">
+                    <div class="media-body">
+                        <h4 class="media-heading">@item.title</h4>
+                        <p id="HideLines">@item.description</p>
+                        <ul class="list-inline list-unstyled">
+                            <li><span><i class="glyphicon glyphicon-calendar"></i>@item.dateStart - @item.dateEnd</span></li>
+                            <li>|</li>
+                            <li><span><i class="glyphicon glyphicon-user"></i>@item.Organizer.name</span></li>
+                            <li>|</li>
+                            <li><span><i class="glyphicon glyphicon-map-marker"></i>@item.Place.name, @item.Place.city @item.Place.address </span></li>
+                            <li>|</li>
+                            <li><span><i class="glyphicon glyphicon-usd"></i>@item.minPrice zł - @item.maxPrice zł</span></li>
+                        </ul>
+                    </div>
+                    <div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (ViewBag.favouriteEvents.Contains(item))
+                            {
+                                <a onclick="favAction(@item.MainEventId)">
+                                    <i class="Heart" id="EventHeart_@item.MainEventId" style="color:red"></i>
+                                </a>
                             }
-                </script>
+                            else
+                            {
+                                <a onclick="favAction(@item.MainEventId)">
+                                    <i class="Heart" id="EventHeart_@item.MainEventId"></i>
+                                </a>
+                            }
+                        }
+                    </div>
+
+                </div>
             </div>
-        </div>
+        </a>
     }
+    <div class="row">
+        <div class="col" style="text-align:left; margin:10px">
+            <input id="btnPrevious" type="button" value="Previous" />
+        </div>
+        <div class="col" style="text-align:right; margin:10px">
+            <input id="btnNext" type="button" value="Next" />
+        </div>
+        <input id="currentPageIndex" type="hidden" value=@ViewBag.CurrentPageIndex />
+    </div>
 </div>
+<script>
+
+     @if (ViewBag.CurrentPageIndex > 1)
+    {
+        @:$("#btnPrevious").attr("disabled");
+    }
+    else
+    {
+        @:$("#btnPrevious").attr("disabled", true);
+        @:$("#btnPrevious").css("color", "Gray");
+    }
+    @if (ViewBag.CurrentPageIndex < ViewBag.LastPageIndex)
+    {
+        @:$("#btnNext").attr("disabled");
+    }
+    else
+    {
+        @:$("#btnNext").attr("disabled", true);
+        @: $("#btnNext").css("color", "Gray");
+    }
+
+    $("#btnNext").click(function () {
+        $.ajax({
+            url: 'MainEvents/PaginationAction',
+            data: { searchText: "@pr", category: "@cat", currentPageIndex: document.getElementById('currentPageIndex').value, dateStart: "@dateStartBuff", dateEnd: "@dateEndBuff" },
+            success: function (response) {
+                $('#grdProvince').html(response);
+                $('#StartListDiv').hide();
+            }
+        });
+    });
+
+    $("#btnPrevious").click(function () {
+        $.ajax({
+            url: 'MainEvents/PaginationAction',
+            data: { searchText: "@pr", category: "@cat", currentPageIndex: document.getElementById('currentPageIndex').value - 2, dateStart: "@dateStartBuff", dateEnd: "@dateEndBuff" },
+            success: function (response) {
+                $('#grdProvince').html(response);
+                $('#StartListDiv').hide();
+            }
+        });
+    });
+
+    function favAction(EventId) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("FavouriteAction", "MainEvents")',
+            data: { id: EventId },
+            dataType: 'json',
+            success: function (result) {
+                if (result.success) {
+                    $("#EventHeart_" + EventId).css('color', 'red');
+                }
+                else {
+                    $("#EventHeart_" + EventId).css('color', '#aaa');
+                }
+            }
+        })
+    }
+</script>

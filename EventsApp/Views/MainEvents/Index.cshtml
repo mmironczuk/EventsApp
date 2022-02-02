@@ -1,86 +1,117 @@
-﻿@model IEnumerable<EventsApp.Models.MainEvent>
+﻿@model ICollection<EventsApp.Models.MainEvent>
 
 @{
     ViewData["Title"] = "Index";
-    string pr = "pomorskie";
     string cat = ViewBag.type;
 }
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.10.1/main.min.css,npm/fullcalendar@5.10.1/main.min.css" />
+<script src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.10.1,npm/fullcalendar@5.10.1/main.min.js,npm/fullcalendar@5.10.1/locales-all.min.js,npm/fullcalendar@5.10.1/locales-all.min.js"></script>
+<style>
+    a, a:hover, a:focus, a:active {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .well {
+        transition: 0.5s;
+    }
+
+        .well:hover {
+            transform: scale(1.02);
+            box-shadow: 7px 7px 10px rgba(0,0,0,0.3);
+        }
+
+        .well::before {
+            transform: scale3d(0, 0, 1);
+            transform-origin: left top;
+            transition: transform .3s ease-out 0s;
+        }
+
+        .well::after {
+            transform: scale3d(0, 0, 1);
+            transform-origin: right bottom;
+            transition: transform .3s ease-out 0s;
+        }
+
+        .well:hover::before, .well:hover::after, .well:focus::before, .well:focus::after {
+            transform: scale3d(1, 1, 1);
+        }
+</style>
+
 <div class="container-fluid">
-    @*<br />*@
     <h4 class="text-center" style="margin:10px"><b>Najbliższe wydarzenia</b></h4>
     <div class="row">
         <div id="grdProvince" class="col-12 col-md-8"></div>
         <div class="col-12 col-md-8" id="StartListDiv">
             @foreach (var item in Model)
             {
-                <div class="well">
-                    <div class="media">
-                        @{
-                            var base64 = Convert.ToBase64String(item.picture);
-                            var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                        }
-                        <img class="media-object pull-left" src="@imgSrc" style="max-width:200px; max-height:200px;">
-                        <div class="media-body">
-                            <h4 class="media-heading">@item.title</h4>
-                            <p id="HideLines">@item.description</p>
-                            <ul class="list-inline list-unstyled">
-                                <li><span><i class="glyphicon glyphicon-calendar"></i>@item.dateStart - @item.dateEnd</span></li>
-                                <li>|</li>
-                                <li><span><i class="glyphicon glyphicon-user"></i>@item.Organizer.name</span></li>
-                                <li>|</li>
-                                <li><span><i class="glyphicon glyphicon-map-marker"></i>@item.Place.name, @item.Place.city @item.Place.address </span></li>
-                                <li>|</li>
-                                <li><span><i class="glyphicon glyphicon-usd"></i>@item.minPrice zł - @item.maxPrice zł</span></li>
-                            </ul>
-                        </div>
-                        <div>
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                @if (ViewBag.favouriteEvents.Contains(item))
-                                {
-                                    <a onclick="addToFav(@item.MainEventId)">
-                                        <i class="Heart" id="EventHeart_@item.MainEventId" style="color:red"></i>
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a onclick="addToFav(@item.MainEventId)">
-                                        <i class="Heart" id="EventHeart_@item.MainEventId"></i>
-                                    </a>
-                                }
+                <a asp-controller="MainEvents" asp-action="Details" asp-route-id="@item.MainEventId">
+                    <div class="well">
+                        <div class="media">
+                            @{
+                                var base64 = Convert.ToBase64String(item.picture);
+                                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
                             }
-                        </div>
-                        <script>
-                            $(function () {
-                                $(".Heart").click(function () {
-                                    $(".Heart,.HeartSpan").toggleClass("press", 1000);
-                                });
-                            });
-                            function addToFav(EventId) {
-                                $.ajax({
-                                    type: "POST",
-                                    url: '@Url.Action("AddToFavourite", "MainEvents")',
-                                    data: { id: EventId },
-                                    dataType: 'json',
-                                    success: function (result) {
-                                        $("#EventHeart_" + EventId).css('color', 'red');
-                                        console.log(EventId);
+                            <img class="media-object pull-left" src="@imgSrc" style="max-width:200px; max-height:200px;">
+                            <div class="media-body">
+                                <h4 class="media-heading">@item.title</h4>
+                                <p id="HideLines">@item.description</p>
+                                <ul class="list-inline list-unstyled">
+                                    <li><span><i class="glyphicon glyphicon-calendar"></i>@item.dateStart - @item.dateEnd</span></li>
+                                    <li>|</li>
+                                    <li><span><i class="glyphicon glyphicon-user"></i>@item.Organizer.name</span></li>
+                                    <li>|</li>
+                                    <li><span><i class="glyphicon glyphicon-map-marker"></i>@item.Place.name, @item.Place.city @item.Place.address </span></li>
+                                    <li>|</li>
+                                    <li><span><i class="glyphicon glyphicon-usd"></i>@item.minPrice zł - @item.maxPrice zł</span></li>
+                                </ul>
+                            </div>
+                            <div>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    @if (ViewBag.favouriteEvents.Contains(item))
+                                    {
+                                        <a onclick="favAction(@item.MainEventId)">
+                                            <i class="Heart" id="EventHeart_@item.MainEventId" style="color:red"></i>
+                                        </a>
                                     }
-                                })
-                            }
-                        </script>
+                                    else
+                                    {
+                                        <a onclick="favAction(@item.MainEventId)">
+                                            <i class="Heart" id="EventHeart_@item.MainEventId"></i>
+                                        </a>
+                                    }
+                                }
+                            </div>
+
+                        </div>
                     </div>
-                </div>
+                </a>
             }
+            <div class="row">
+                <div class="col" style="text-align:left; margin:10px">
+                    <input id="btnPrevious" type="button" value="Previous" />
+                </div>
+                <div class="col" style="text-align:right; margin:10px">
+                    <input id="btnNext" type="button" value="Next" />
+                </div>
+                <input id="currentPageIndex" type="hidden" value=@ViewBag.CurrentPageIndex />
+            </div>
         </div>
+        <script>
+        </script>
         <div class="col-6 col-md-4">
             <h5 class="text-center" style="margin:7px"><b>Kryteria wyszukiwania</b></h5>
             <p><b>województwo: </b><span id="ProvinceSpan">-</span></p>
             <p>
                 <b>kategoria: </b>
-                @if (ViewBag.type == "none") {<span id="TypeSpan">-</span>}
-                else if (ViewBag.type == "sztuka") {<span id="TypeSpan">sztuka i kultura</span>}
-                else {<span>@ViewBag.type</span>}
+                @if (ViewBag.type == "none")
+                {<span id="TypeSpan">-</span>}
+                else if (ViewBag.type == "sztuka")
+                {<span id="TypeSpan">sztuka i kultura</span>}
+                else
+                {<span>@ViewBag.type</span>}
             </p>
             <svg @*width="100mm"
                  height="85mm"*@
@@ -174,6 +205,7 @@
                           inkscape:label="path489" />
                 </g>
             </svg>
+            <div id='calendar' style="background-color:white; padding:10px"></div>
         </div>
     </div>
     <br />
@@ -201,16 +233,102 @@
     </div>
 </div>
 <script>
+    var provinceBuff = "temp";
+    var dateStartSearch = "temp";
+    var dateEndSearch = "temp";
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        windowResize: false,
+        selectable: true,
+        select: function (info) {
+           $.ajax({
+               url: '@Url.Action("SearchAction", "MainEvents")',
+               datatype: 'html',
+               method: 'GET',
+               data: { searchText: provinceBuff, category: "@cat", dateStart: info.startStr, dateEnd: info.endStr },
+               success: function (res) {
+                    $('#grdProvince').html(res);
+                    $('#StartListDiv').hide();
+                    dateStartSearch = info.startStr;
+                    dateEndSearch = info.endStr;
+               },
+               error: function (err) {
+                    console.log("error");
+               }
+            })
+        }
+    });
+    calendar.render();
+
+    @if (ViewBag.CurrentPageIndex > 1)
+    {
+        @:$("#btnPrevious").attr("disabled");
+    }
+    else
+    {
+        @:$("#btnPrevious").attr("disabled", true);
+        @:$("#btnPrevious").css("color", "Gray");
+    }
+    @if (ViewBag.CurrentPageIndex < ViewBag.LastPageIndex)
+    {
+        @:$("#btnNext").attr("disabled");
+    }
+    else
+    {
+        @:$("#btnNext").attr("disabled", true);
+        @: $("#btnNext").css("color", "Gray");
+    }
+
+    $("#btnNext").click(function () {
+        $.ajax({
+            url: 'MainEvents/PaginationAction',
+            data: { searchText: provinceBuff, category: "@cat", currentPageIndex: document.getElementById('currentPageIndex').value, dateStart: dateStartSearch, dateEnd: dateEndSearch },
+            success: function (response) {
+                $('#grdProvince').html(response);
+                $('#StartListDiv').hide();
+            }
+        });
+    });
+
+    $("#btnPrevious").click(function () {
+        $.ajax({
+            url: 'MainEvents/PaginationAction',
+            data: { searchText: provinceBuff, category: "@cat", currentPageIndex: document.getElementById('currentPageIndex').value - 2, dateStart: dateStartSearch, dateEnd: dateEndSearch },
+            success: function (response) {
+                $('#grdProvince').html(response);
+                $('#StartListDiv').hide();
+            }
+        });
+    });
+
+    function favAction(EventId) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("FavouriteAction", "MainEvents")',
+            data: { id: EventId },
+            dataType: 'json',
+            success: function (result) {
+                if (result.success) {
+                    $("#EventHeart_" + EventId).css('color', 'red');
+                }
+                else {
+                    $("#EventHeart_" + EventId).css('color', '#aaa');
+                }
+            }
+        })
+    }
+
     //pomorskie
     $('#path523').click(function () {
+        provinceBuff = "pomorskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path523').css({ fill: "#F00" });
-        $@pr="pomorskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "@pr", category: "@cat" },
+            data: { searchText: "pomorskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch },
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -223,14 +341,14 @@
     });
     //warmińsko-mazurskie
     $('#path521').click(function () {
+        provinceBuff = "warmińsko-mazurskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path521').css({ fill: "#F00" });
-        $@pr="warmińsko-mazurskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "warmińsko-mazurskie", category: "@cat" },
+            data: { searchText: "warmińsko-mazurskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch },
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -243,14 +361,14 @@
     });
     //zachodniopomorskie
     $('#path519').click(function () {
+        provinceBuff = "zachodniopomorskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path519').css({ fill: "#F00" });
-        $@pr="zachodniopomorskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "zachodniopomorskie", category: "@cat" },
+            data: { searchText: "zachodniopomorskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch },
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -263,14 +381,14 @@
     });
     //podlaskie
     $('#path517').click(function () {
+        provinceBuff = "podlaskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path517').css({ fill: "#F00" });
-        $@pr="podlaskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "podlaskie", category: "@cat"},
+            data: { searchText: "podlaskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch},
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -283,14 +401,14 @@
     });
     //kujawsko-pomorskie
     $('#path515').click(function () {
+        provinceBuff = "kujawsko-pomorskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path515').css({ fill: "#F00" });
-        $@pr="kujawsko-pomorskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "kujawsko-pomorskie", category: "@cat" },
+            data: { searchText: "kujawsko-pomorskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch },
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -303,14 +421,14 @@
     });
     //lubuskie
     $('#path511').click(function () {
+        provinceBuff = "lubuskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path511').css({ fill: "#F00" });
-        $@pr="lubuskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "lubuskie", category: "@cat" },
+            data: { searchText: "lubuskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch },
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -323,14 +441,14 @@
     });
     //wielkopolskie
     $('#path509').click(function () {
+        provinceBuff = "wielkopolskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path509').css({ fill: "#F00" });
-        $@pr="wielkopolskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "wielkopolskie", category: "@cat" },
+            data: { searchText: "wielkopolskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch},
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -343,14 +461,14 @@
     });
     //mazowieckie
     $('#path507').click(function () {
+        provinceBuff = "mazowieckie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path507').css({ fill: "#F00" });
-        $@pr="mazowieckie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "mazowieckie", category: "@cat" },
+            data: { searchText: "mazowieckie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch },
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -363,14 +481,14 @@
     });
     //łódzkie
     $('#path503').click(function () {
+        provinceBuff = "łódzkie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path503').css({ fill: "#F00" });
-        $@pr="łódzkie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "łódzkie", category: "@cat" },
+            data: { searchText: "łódzkie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch },
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -383,14 +501,14 @@
     });
     //lubelskie
     $('#path501').click(function () {
+        provinceBuff = "lubelskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path501').css({ fill: "#F00" });
-        $@pr="lubelskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "lubelskie", category: "@cat" },
+            data: { searchText: "lubelskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch},
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -403,14 +521,14 @@
     });
     //świętokrzyskie
     $('#path499').click(function () {
+        provinceBuff = "świętokrzyskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path499').css({ fill: "#F00" });
-        $@pr="świętokrzyskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "świętokrzyskie", category: "@cat" },
+            data: { searchText: "świętokrzyskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch },
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -423,14 +541,14 @@
     });
     //dolnośląskie
     $('#path497').click(function () {
+        provinceBuff = "dolnośląskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path497').css({ fill: "#F00" });
-        $@pr="dolnośląskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "dolnośląskie", category: "@cat" },
+            data: { searchText: "dolnośląskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch},
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -443,14 +561,14 @@
     });
     //opolskie
     $('#path495').click(function () {
+        provinceBuff = "opolskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path495').css({ fill: "#F00" });
-        $@pr="opolskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "opolskie", category: "@cat" },
+            data: { searchText: "opolskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch },
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -463,14 +581,14 @@
     });
     //śląskie
     $('#path493').click(function () {
+        provinceBuff = "śląskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path493').css({ fill: "#F00" });
-        $@pr="śląskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "śląskie", category: "@cat" },
+            data: { searchText: "śląskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch},
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -483,14 +601,14 @@
     });
     //małopolskie
     $('#path491').click(function () {
+        provinceBuff = "małopolskie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path491').css({ fill: "#F00" });
-        $@pr="małopolskie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "małopolskie", category: "@cat" },
+            data: { searchText: "małopolskie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch },
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();
@@ -503,14 +621,14 @@
     });
     //podkarpackie
     $('#path489').click(function () {
+        provinceBuff = "podkarpackie";
         $('#path523, #path521, #path519, #path517, #path515, #path511, #path509, #path507, #path503, #path501, #path499, #path497, #path495, #path493, #path491, #path489').css({ fill: "#ffffff" });
         $('#path489').css({ fill: "#F00" });
-        $@pr="podkarpackie";
         $.ajax({
-            url: '@Url.Action("SearchByProvince", "MainEvents")',
+            url: '@Url.Action("SearchAction", "MainEvents")',
             datatype: 'html',
             method: 'GET',
-            data: { searchText: "podkarpackie", category: "@cat" },
+            data: { searchText: "podkarpackie", category: "@cat", dateStart: dateStartSearch, dateEnd: dateEndSearch},
             success: function (res) {
                 $('#grdProvince').html(res);
                 $('#StartListDiv').hide();

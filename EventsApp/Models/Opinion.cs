@@ -13,6 +13,7 @@ namespace EventsApp.Models
         public string UserId { get; set; }
         [Display(Name ="Treść")]
         public string content { get; set; }
+        public DateTime date { get; set; }
         public virtual MainEvent MainEvent { get; set; }
         public virtual User User { get; set; }
     }

@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using EventsApp.Data;
 using EventsApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using EventsApp.ViewModels;
+using AutoMapper;
 
 namespace EventsApp.Controllers
 {
@@ -22,7 +24,7 @@ namespace EventsApp.Controllers
 
         // GET: Favourites
         [Authorize]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
             //var applicationDbContext = _context.Favourites.Include(f => f.MainEvent).Include(f => f.User).Where(f=>f.UserId==user.Id);
@@ -33,7 +35,62 @@ namespace EventsApp.Controllers
             {
                 applicationDbContext.Add(f.MainEvent);
             }
+
             return View(applicationDbContext);
+        }
+
+        public string GetColor(MainEvent ev)
+        {
+            string color = "blue";
+            switch(ev.type)
+            {
+                case "muzyka":
+                    color = "blue";
+                    break;
+                case "teatr":
+                    color = "purple";
+                    break;
+                case "nauka":
+                    color = "green";
+                    break;
+                case "sztuka":
+                    color = "purple";
+                    break;
+                case "sport":
+                    color = "red";
+                    break;
+                default:
+                    color = "blue";
+                    break;
+            }
+            return color;
+        }
+
+        public async Task<JsonResult> GetCalendarData()
+        {
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<MainEvent, CalendarEventViewModel>());
+            var mapper = config.CreateMapper();
+            User user = await _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefaultAsync();
+            var eventsViewModels = new List<CalendarEventViewModel>();
+            List<MainEvent> events = new List<MainEvent>();
+            var favourites = await _context.Favourites.Include(x => x.MainEvent).Include(x => x.MainEvent.Organizer).Include(x => x.MainEvent.Place).Include(x => x.MainEvent.Opinions)
+                .Where(x => x.UserId == user.Id).ToListAsync();
+            foreach (Favourites f in favourites)
+            {
+                events.Add(f.MainEvent);
+            }
+
+            foreach (var ev in events)
+            {
+                var eventView = mapper.Map<CalendarEventViewModel>(ev);
+                eventView.color = GetColor(ev);
+                eventView.start = ev.dateStart.ToString("yyyy-MM-dd");
+                eventView.end = ev.dateEnd.ToString("yyyy-MM-dd");
+                eventView.url = $"/MainEvents/Details/{ev.MainEventId}";
+
+                eventsViewModels.Add(eventView);
+            }
+            return Json(eventsViewModels.ToArray());
         }
 
         // GET: Favourites/Details/5
@@ -138,27 +195,13 @@ namespace EventsApp.Controllers
         }
 
         // GET: Favourites/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var favourites = await _context.Favourites
-            //    .Include(f => f.MainEvent)
-            //    .Include(f => f.User)
-            //    .FirstOrDefaultAsync(m => m.FavouritesId == id);
-            //if (favourites == null)
-            //{
-            //    return NotFound();
-            //}
             User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
             var favourite = _context.Favourites.Where(x => x.MainEventId == id && x.UserId == user.Id).FirstOrDefault();
             _context.Favourites.Remove(favourite);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
-            //return View(favourites);
         }
 
         // POST: Favourites/Delete/5
@@ -166,13 +209,10 @@ namespace EventsApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //var favourites = await _context.Favourites.FindAsync(id);
-            //_context.Favourites.Remove(favourites);
-            //await _context.SaveChangesAsync();
             User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
             var favourite = _context.Favourites.Where(x => x.MainEventId == id && x.UserId == user.Id).FirstOrDefault();
             _context.Favourites.Remove(favourite);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

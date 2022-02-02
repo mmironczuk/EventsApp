@@ -44,6 +44,5 @@ namespace EventsApp.Models
         public virtual ICollection<Opinion> Opinions { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<Favourites> Favourites { get; set; }
-        public virtual ICollection<TagEvent> TagEvents { get; set; }
     }
 }

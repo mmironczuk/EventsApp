@@ -11,9 +11,7 @@ namespace EventsApp.Models
         public int TicketId { get; set; }
         [Display(Name ="Wydarzenie")]
         public int MainEventId { get; set; }
-        public string AccountId { get; set; }
-        [Display(Name ="Cena")]
-        public double cost { get; set; }
+        public string UserId { get; set; }
         public virtual MainEvent MainEvent { get; set; }
         public virtual User User { get; set; }
     }
