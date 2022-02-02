@@ -145,10 +145,6 @@
             "MimeKit": {
               "target": "Package",
               "version": "[2.15.1, )"
-            },
-            "PagedList.Mvc": {
-              "target": "Package",
-              "version": "[4.5.0, )"
             }
           },
           "imports": [

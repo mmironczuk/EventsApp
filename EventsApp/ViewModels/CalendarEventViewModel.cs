@@ -7,12 +7,11 @@ namespace EventsApp.ViewModels
 {
     public class CalendarEventViewModel
     {
-        //public int CalendarEventId { get; set; }
         public string title { get; set; }
         public string description { get; set; }
         public string start { get; set; }
         public string end { get; set; }
         public string color { get; set; }
-        //public string borderColor { get; set; }
+        public string url { get; set; }
     }
 }

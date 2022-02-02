@@ -24,7 +24,7 @@ namespace EventsApp.Controllers
 
         // GET: Favourites
         [Authorize]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
             //var applicationDbContext = _context.Favourites.Include(f => f.MainEvent).Include(f => f.User).Where(f=>f.UserId==user.Id);
@@ -86,6 +86,7 @@ namespace EventsApp.Controllers
                 eventView.color = GetColor(ev);
                 eventView.start = ev.dateStart.ToString("yyyy-MM-dd");
                 eventView.end = ev.dateEnd.ToString("yyyy-MM-dd");
+                eventView.url = $"/MainEvents/Details/{ev.MainEventId}";
 
                 eventsViewModels.Add(eventView);
             }
@@ -194,27 +195,13 @@ namespace EventsApp.Controllers
         }
 
         // GET: Favourites/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var favourites = await _context.Favourites
-            //    .Include(f => f.MainEvent)
-            //    .Include(f => f.User)
-            //    .FirstOrDefaultAsync(m => m.FavouritesId == id);
-            //if (favourites == null)
-            //{
-            //    return NotFound();
-            //}
             User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
             var favourite = _context.Favourites.Where(x => x.MainEventId == id && x.UserId == user.Id).FirstOrDefault();
             _context.Favourites.Remove(favourite);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
-            //return View(favourites);
         }
 
         // POST: Favourites/Delete/5
@@ -222,13 +209,10 @@ namespace EventsApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //var favourites = await _context.Favourites.FindAsync(id);
-            //_context.Favourites.Remove(favourites);
-            //await _context.SaveChangesAsync();
             User user = _context.User.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
             var favourite = _context.Favourites.Where(x => x.MainEventId == id && x.UserId == user.Id).FirstOrDefault();
             _context.Favourites.Remove(favourite);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

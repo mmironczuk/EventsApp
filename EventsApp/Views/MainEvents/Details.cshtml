@@ -3,42 +3,63 @@
 @{
     ViewData["Title"] = "Details";
 }
-<article>
-    @{
-        var base64 = Convert.ToBase64String(Model.picture);
-        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-    }
-    <img src="@imgSrc" alt="" class="img-fluid mb30">
-    <div class="post-content">
-        <h3>@Model.title</h3>
-        <ul class="post-meta list-inline">
-            <li class="list-inline-item">
-                <i class="fa fa-user-circle-o"></i>@Model.Organizer.name
-            </li>
-            <li class="list-inline-item">
-                <i class="fa fa-calendar-o"></i>@Model.dateStart - @Model.dateEnd
-            </li>
-            <li class="list-inline-item">
-                <i class="fa fa-location-arrow"></i>@Model.Place.name, @Model.Place.address @Model.Place.city
-            </li>
-        </ul>
-        <ul class="post-meta list-inline">
-            <li class="list-inline-item">
-                <i class="fa fa-ticket"></i>@Model.freeTickets
-            </li>
-            <li class="list-inline-item">
-                <i class="fa fa-money"></i>@Model.minPrice zł - @Model.maxPrice zł
-            </li>
-        </ul>
-        <p>@Model.description</p>
-    </div>
-</article>
-@*<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">*@
+
 <section class="content-item" id="comments">
     <div class="container">
+        <article>
+            @{
+                var base64 = Convert.ToBase64String(Model.picture);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            }
+            <div style="text-align:center"><img src="@imgSrc" alt="" class="img-fluid mb30"></div>
+            <div class="post-content">
+                <h2 style="text-align:center"><b>@Model.title</b></h2>
+                <p style="justify-content:center">@Model.description</p>
+                <ul class="post-meta list-inline">
+                    <li class="list-inline-item">
+                        <i class="fa fa-user-circle-o" style="color:black"></i>@Model.Organizer.name
+                    </li>
+                    <li class="list-inline-item">
+                        <i class="fa fa-calendar-o" style="color:black"></i>@Model.dateStart - @Model.dateEnd
+                    </li>
+                    <li class="list-inline-item">
+                        <i class="fa fa-location-arrow" style="color:black"></i>@Model.Place.name, @Model.Place.address @Model.Place.city
+                    </li>
+                </ul>
+                <ul class="post-meta list-inline" style="text-align:center">
+                    <li class="list-inline-item">
+                        <i class="fa fa-ticket" style="color:black"></i>@Model.freeTickets
+                    </li>
+                    <li class="list-inline-item">
+                        <i class="fa fa-money" style="color:black"></i>@Model.minPrice zł - @Model.maxPrice zł
+                    </li>
+                </ul>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @if (ViewBag.flag == false)
+                    {
+                        <div class="row text-center" id="ticketDiv">
+                            <div class="col">
+                                <span><b>Ilość miejsc:</b></span><input id="ticketCount" type="number" value="0" style="width:60px; margin-left:15px" min="0" max="30" />
+                                <input id="ticketButton" type="button" onclick="ticketClick()" class="btn-success" value="Rezerwuj miejsca" style="margin-left:15px" />
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row text-center" id="reservationDiv">
+                            <h3 style="color:red"><b>Z tego konta zostały już zarezerwowane bilety. W celu anulowanie, przejdź do zakładki Rezerwacje</b></h3>
+                        </div>
+                    }
+                }
+            </div>
+        </article>
         <div class="row">
             <div class="col">
-                    <h3 class="pull-left">Nowy komentarz</h3>
+
+                <h3>Komentarze</h3>
+                @if (User.Identity.IsAuthenticated)
+                {
                     <fieldset>
                         <div class="row">
                             <div class="col-sm-3 col-lg-2 hidden-xs">
@@ -46,47 +67,65 @@
                             </div>
                             <div class="form-group col-xs-12 col-sm-9 col-lg-10">
                                 <textarea class="form-control" id="message" placeholder="Twoja wiadomość" required=""></textarea>
-                                <a class="btn btn-dark" onclick="comAction(@Model.MainEventId)">Dodaj komentarz</a>
+                                <a class="btn btn-warning" onclick="comAction(@Model.MainEventId)">Dodaj komentarz</a>
                             </div>
                         </div>
                     </fieldset>
-
-                <h3>Komentarze</h3>
+                }
+                else
+                {
+                    <h3><b><a asp-area="Identity" asp-page="/Account/Login">Zaloguj się</a>, aby móc dodać komentarz</b></h3>
+                }
                 <div id="commentsUsers"></div>
                 <div id="firstComments">
                     @if (ViewBag.Comments.Count > 0)
                     {
                         @foreach (var item in ViewBag.Comments)
                         {
-                            <div class="media">
-                                <img class="media-object" src="~/images/profilePng.png" alt="">
-                                <div class="media-body">
-                                    <h4 class="media-heading">@item.User.UserName</h4>
-                                    <ul class="list-unstyled list-inline media-detail pull-left">
-                                        <li><i class="fa fa-calendar"></i>@item.date.ToShortTimeString()</li>
-                                    </ul>
-                                    <p>@item.content</p>
-                                </div>
+                    <div class="media">
+                        <img class="media-object" src="~/images/profilePng.png" alt="">
+                        <div class="media-body">
+                            <h4 class="media-heading">@item.User.UserName</h4>
+                            <ul class="list-unstyled list-inline media-detail pull-left">
+                                <li>@item.date</li>
+                            </ul>
+                            <div>
+                                <p style="margin:10px">  @item.content</p>
                             </div>
+                        </div>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="Gicons">
+                                <a asp-action="Delete" asp-controller="Opinions" asp-route-id="@item.OpinionId">
+                                    <i class="glyphicon glyphicon-remove" style="color:red;font-size:30px;margin:10px"></i>
+                                </a>
+                            </div>
+                        }
+                    </div>
                         }
                     }
                 </div>
-
-                @*<div class="media">
-            <img class="media-object" src="~/images/profilePng.png" alt="">
-            <div class="media-body">
-                <h4 class="media-heading">John Doe</h4>
-                <ul class="list-unstyled list-inline media-detail pull-left">
-                    <li><i class="fa fa-calendar"></i>27/02/2014</li>
-                </ul>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-        </div>*@
             </div>
         </div>
     </div>
 </section>
 <script>
+    function ticketClick() {
+        $.ajax({
+            url: '@Url.Action("TicketAction", "Tickets")',
+            data: { count: document.getElementById('ticketCount').value, id: "@Model.MainEventId" },
+            success: function (response) {
+                if (response.success) {
+                    alert("Rezerwacja dokonana pomyślnie!");
+                    location.reload();
+                }
+                else {
+                    alert("Brak wolnych miejsc");
+                }
+            }
+        });
+    };
+
     function comAction(EventId) {
         var text = $('textarea#message').val();
          $.ajax({
@@ -98,7 +137,7 @@
                $('#commentsUsers').html(res);
                $('#firstComments').hide();
                $('textarea#message').val("");
-           }   
+           }
          })
     }
 </script>

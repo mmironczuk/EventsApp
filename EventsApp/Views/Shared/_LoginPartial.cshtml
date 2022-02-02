@@ -5,12 +5,9 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-        @*<li class="nav-item">
-            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-        </li>*@
         <li class="p-2 text-light" style="position:relative;top:12px;font-size:18px;margin-right:10px">Zalogowano jako <b>@User.Identity.Name</b></li>
         <li class="nav-item">
-            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Email" title="Manage">
                 <div>
                     <i class="fa fa-user-circle-o"></i>Konto
                 </div>

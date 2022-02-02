@@ -1,47 +1,40 @@
-﻿@model IEnumerable<EventsApp.Models.Ticket>
+﻿@model ICollection<EventsApp.Models.MainEvent>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Rezerwacje";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.cost)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MainEvent)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.cost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MainEvent.MainEventId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TicketId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TicketId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TicketId">Delete</a>
-            </td>
-        </tr>
+@foreach (var item in Model)
+{
+    <div class="well">
+        <div class="media">
+            @{
+                var base64 = Convert.ToBase64String(item.picture);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            }
+            <img class="media-object pull-left" src="@imgSrc" style="max-width:200px; max-height:200px;">
+            <div class="media-body">
+                <h4 class="media-heading">@item.title</h4>
+                <p class="text-justify">@item.description</p>
+                @{
+                    int count = 0;
+                    foreach (var t in ViewBag.tickets)
+                    {
+                        if (item.MainEventId == t.MainEventId) count++;
+                    }
+                    <ul class="list-inline list-unstyled">
+                        <li><span><i class="glyphicon glyphicon-calendar"></i>@item.dateStart - @item.dateEnd</span></li>
+                    </ul>
+                    <ul class="list-inline list-unstyled">
+                        <li><span>Zarezerwowana ilość biletów:<b> @count</b></span></li>
+                        <li>
+                            <a asp-action="DeleteTickets" asp-controller="Tickets" asp-route-id="@item.MainEventId" class="btn-danger">
+                                Usuń rezerwację
+                            </a>
+                        </li>
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
 }
-    </tbody>
-</table>

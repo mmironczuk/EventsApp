@@ -11,60 +11,16 @@
 <div id='calendar'></div>
 
 <script>
-    @*var eventsArray = [];
-    eventsArray = function () {
-        $.ajax({
-            type: "GET",
-            url: '@Url.Action("GetCalendarData", "Favourites")',
-            dataType: 'json',
-            success: function (result) {
-            }
-        })
-    };
-    console.log('@Url.Action("GetCalendarData", "Favourites")');
-    document.addEventListener('DOMContentLoaded', function (eventsArray) {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            /*themeSystem: 'Slate',*/
-            windowResize: true,
-            //events:eventArray
-            //events: '@Url.RouteUrl(new{ action= "GetCalendarData", controller= "Favourites" })'
-            events: '@Url.Action("GetCalendarData", "Favourites")'
-            //events: [
-            //    {
-            //        title: 'test',
-            //        description: 'aaa',
-            //        start: '2021-12-08',
-            //        end: '2021-12-10',
-            //        color: "green"
-            //    }
-            //]
-        });
-        calendar.render();
-    });*@
-    //function GenerateCaledar(events) {
-    //    var calendarEl = document.getElementById('calendar');
-    //    var calendar = new FullCalendar.Calendar(calendarEl, {
-    //        initialView: 'dayGridMonth',
-    //        /*themeSystem: 'Slate',*/
-    //        windowResize: true,
-    //        eventSources: [events]
-    //    });
-    //    calendar.render();
-    //}
     function GetData() {
         $.ajax({
             type: 'GET',
             url: "/Favourites/GetCalendarData",
-            success: function (events) {
-                console.log(events);
+            success: function (eventsList) {
                 var calendarEl = document.getElementById('calendar');
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
-                    /*themeSystem: 'Slate',*/
-                    windowResize: true,
-                    events: events
+                    windowResize: false,
+                    events: eventsList
                 });
                 calendar.render();
             },

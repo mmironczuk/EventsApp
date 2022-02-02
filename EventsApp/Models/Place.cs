@@ -22,8 +22,6 @@ namespace EventsApp.Models
         [Display(Name = "Adres")]
         public string address { get; set; }
         public bool confirmed { get; set; }
-        //[Display(Name ="Typ obiektu")]
-        //public string placeType{ get; set; }
         public virtual ICollection<MainEvent> MainEvents { get; set; }
     }
 }

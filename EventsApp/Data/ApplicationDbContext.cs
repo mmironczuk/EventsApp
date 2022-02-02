@@ -13,11 +13,9 @@ namespace EventsApp.Data
             : base(options)
         {
         }
-        public DbSet<Album> Album { get; set; }
         public DbSet<MainEvent> Event { get; set; }
         public DbSet<Favourites> Favourites { get; set; }
         public DbSet<Opinion> Opinion { get; set; }
-        public DbSet<Photo> Photo { get; set; }
         public DbSet<Place> Place { get; set; }
         public DbSet<Ticket> Ticket { get; set; }
         public DbSet<User> User { get; set; }
